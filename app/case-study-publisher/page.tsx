@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -36,15 +37,15 @@ export default function CaseStudyPublisherPage() {
           </div>
         </dl>
 
-        <div className="img-placeholder img-placeholder--wide mt-7">
-          <div className="img-placeholder__inner">
-            <span className="img-placeholder__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-            </span>
-            <p className="img-placeholder__eyebrow">Image · 16:9 hero</p>
-            <p className="img-placeholder__caption">Anonymised editorial image the product in a classroom or institutional context. Materials in use.</p>
-          </div>
-        </div>
+        <figure className="img-frame img-frame--wide mt-7">
+          <Image
+            src="/images/case-study-publisher-hero.png"
+            alt="The product in a classroom or institutional context. Materials in use."
+            width={1600}
+            height={900}
+            priority
+          />
+        </figure>
       </div>
     </section>
 
@@ -116,15 +117,15 @@ export default function CaseStudyPublisherPage() {
     {/* IMAGE BREAK outcome */}
     <section className="image-band">
       <div className="container">
-        <div className="img-placeholder img-placeholder--banner">
-          <div className="img-placeholder__inner">
-            <span className="img-placeholder__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-            </span>
-            <p className="img-placeholder__eyebrow">Image · 21:9 banner</p>
-            <p className="img-placeholder__caption">Repositioned product suite bilingual materials, ecosystem layout, institutional packaging.</p>
-          </div>
-        </div>
+        <figure className="img-frame img-frame--banner">
+          <Image
+            src="/images/case-study-publisher-banner.png"
+            alt="Repositioned product suite — bilingual materials, ecosystem layout, institutional packaging."
+            width={1600}
+            height={686}
+            loading="lazy"
+          />
+        </figure>
       </div>
     </section>
 

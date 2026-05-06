@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -115,15 +116,15 @@ export default function CaseStudyAdvisorPage() {
     {/* IMAGE BREAK outcome */}
     <section className="image-band">
       <div className="container">
-        <div className="img-placeholder img-placeholder--banner">
-          <div className="img-placeholder__inner">
-            <span className="img-placeholder__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-            </span>
-            <p className="img-placeholder__eyebrow">Image · 21:9 banner</p>
-            <p className="img-placeholder__caption">Deliverable rebuilt platform, brand artefacts, positioning document. Anonymised.</p>
-          </div>
-        </div>
+        <figure className="img-frame img-frame--banner">
+          <Image
+            src="/images/case-study-advisor-banner.png"
+            alt="Deliverable artefacts — rebuilt platform, brand system, positioning document. Anonymised."
+            width={1600}
+            height={686}
+            loading="lazy"
+          />
+        </figure>
       </div>
     </section>
 

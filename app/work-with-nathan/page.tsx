@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -45,15 +46,15 @@ export default function WorkWithNathanPage() {
     {/* IMAGE BREAK */}
     <section className="image-band">
       <div className="container">
-        <div className="img-placeholder img-placeholder--banner">
-          <div className="img-placeholder__inner">
-            <span className="img-placeholder__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-            </span>
-            <p className="img-placeholder__eyebrow">Image · 21:9 banner</p>
-            <p className="img-placeholder__caption">Editorial photograph The CORE Discovery Session in progress. Nathan with a client, working through positioning.</p>
-          </div>
-        </div>
+        <figure className="img-frame img-frame--banner">
+          <Image
+            src="/images/work-with-nathan-discovery-session.png"
+            alt="The CORE Discovery Session in progress — Nathan with a client, working through positioning."
+            width={1600}
+            height={686}
+            loading="lazy"
+          />
+        </figure>
       </div>
     </section>
 
@@ -140,15 +141,15 @@ export default function WorkWithNathanPage() {
     {/* IMAGE BREAK */}
     <section className="image-band">
       <div className="container">
-        <div className="img-placeholder img-placeholder--wide">
-          <div className="img-placeholder__inner">
-            <span className="img-placeholder__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-            </span>
-            <p className="img-placeholder__eyebrow">Image · 16:9</p>
-            <p className="img-placeholder__caption">Editorial photograph Nathan, mid-engagement. The work, close.</p>
-          </div>
-        </div>
+        <figure className="img-frame img-frame--wide">
+          <Image
+            src="/images/work-with-nathan-mid-engagement.png"
+            alt="Nathan mid-engagement — the work, close."
+            width={1600}
+            height={900}
+            loading="lazy"
+          />
+        </figure>
       </div>
     </section>
 
