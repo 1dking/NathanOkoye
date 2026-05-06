@@ -408,13 +408,13 @@ p { margin: 0 0 var(--s-3); }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(241, 236, 227, 0.85);
-  backdrop-filter: saturate(140%) blur(10px);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 1px solid transparent;
+  background: rgba(241, 236, 227, 0.96);
+  backdrop-filter: saturate(160%) blur(16px);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  border-bottom: 1px solid var(--rule);
   transition: border-color var(--t-med) var(--ease), background var(--t-med) var(--ease);
 }
-.site-header.is-scrolled { border-bottom-color: var(--rule); }
+.site-header.is-scrolled { border-bottom-color: var(--rule); box-shadow: 0 4px 18px -14px rgba(26, 23, 20, 0.18); }
 
 .nav {
   display: flex;
@@ -520,6 +520,18 @@ p { margin: 0 0 var(--s-3); }
   white-space: nowrap;
 }
 .nav-link:hover { color: var(--accent); text-decoration: none; }
+
+/* Defensive override — on every page that's NOT the dramatic-hero homepage
+   (initial state) and NOT the assessment, force every visible nav element
+   to solid ink so leaked context can't render the menu invisible. */
+body:not(.has-dark-hero):not(.is-assessment) .site-header .nav-brand,
+body:not(.has-dark-hero):not(.is-assessment) .site-header .nav-link,
+body:not(.has-dark-hero):not(.is-assessment) .site-header .nav-dropdown-trigger {
+  color: var(--ink);
+}
+body:not(.has-dark-hero):not(.is-assessment) .site-header .nav-toggle span {
+  background: var(--ink);
+}
 .nav-link[aria-current="page"]::after {
   content: "";
   position: absolute;
@@ -1731,14 +1743,14 @@ body.has-dark-hero .site-header .nav-toggle span { background: #FFFFFF; }
 
 /* Once scrolled, header reverts to the cream paper treatment */
 body.has-dark-hero .site-header.is-scrolled {
-  /* Frosted-glass / "mirror" effect — translucent paper with a strong
-     backdrop-filter so the page content scrolling underneath shows
-     through with a soft blur. */
-  background: rgba(241, 236, 227, 0.55);
+  /* Frosted-glass / "mirror" effect — paper at 78% with a heavy backdrop
+     blur, so scrolling content shows through as a soft blur but the nav
+     stays unambiguously legible. */
+  background: rgba(241, 236, 227, 0.78);
   -webkit-backdrop-filter: saturate(180%) blur(22px);
   backdrop-filter: saturate(180%) blur(22px);
   border-bottom-color: var(--rule);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 8px 24px -16px rgba(26, 23, 20, 0.18);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 8px 24px -16px rgba(26, 23, 20, 0.22);
 }
 body.has-dark-hero .site-header.is-scrolled .nav-brand,
 body.has-dark-hero .site-header.is-scrolled .nav-link,
