@@ -2,17 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { insertRow } from "@/lib/supabase";
+import { getOrCreateVisitorToken } from "@/lib/visitor";
 
-/* =========================================================================
-   CONFIG — swap these constants in when credentials are ready.
-   Leave the YOUR_… placeholders in place to skip network calls in dev.
-   ========================================================================= */
-const FORMSPREE_ENDPOINT = "YOUR_FORMSPREE_ENDPOINT_HERE";
-const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
 const SUPABASE_TABLE = "assessment_submissions";
-
-const isPlaceholder = (v: string) => !v || v.startsWith("YOUR_");
 
 /* ---- Data --------------------------------------------------------------- */
 
@@ -205,7 +198,8 @@ export default function AssessmentClient() {
     const areaScores = computeAreaScores();
     const tier = getTier(totalScore);
 
-    const payload: Record<string, string | number> = {
+    const payload: Record<string, string | number | null> = {
+      visitor_token: getOrCreateVisitorToken(),
       first_name: fn,
       email: em,
       total_score: totalScore,
@@ -219,37 +213,12 @@ export default function AssessmentClient() {
     for (let i = 1; i <= 10; i++) {
       payload[`statement_${i}`] = ratings[i];
     }
-    const supabasePayload = { ...payload, submitted_at: new Date().toISOString() };
 
-    const formspreePromise = isPlaceholder(FORMSPREE_ENDPOINT)
-      ? Promise.resolve()
-      : fetch(FORMSPREE_ENDPOINT, {
-          method: "POST",
-          headers: { Accept: "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-    const supabasePromise =
-      isPlaceholder(SUPABASE_URL) || isPlaceholder(SUPABASE_ANON_KEY)
-        ? Promise.resolve()
-        : fetch(`${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${SUPABASE_TABLE}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              Prefer: "return=minimal",
-            },
-            body: JSON.stringify(supabasePayload),
-          });
-
-    const results = await Promise.allSettled([formspreePromise, supabasePromise]);
-    results.forEach((r, i) => {
-      if (r.status === "rejected") {
-        // eslint-disable-next-line no-console
-        console.warn(`${["Formspree", "Supabase"][i]} submission failed`, r.reason);
-      }
-    });
+    const result = await insertRow(SUPABASE_TABLE, payload);
+    if (!result.ok) {
+      // eslint-disable-next-line no-console
+      console.warn("Assessment submission failed", result.status, result.error);
+    }
 
     setSubmitting(false);
     setSubmitted({

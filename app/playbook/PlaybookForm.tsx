@@ -1,22 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { insertRow } from "@/lib/supabase";
+import { getOrCreateVisitorToken } from "@/lib/visitor";
 
-/* =========================================================================
-   CONFIG — swap these constants in when credentials are ready.
-   The form silently no-ops the network calls while these placeholders
-   remain in place, so the page is safe to deploy before wiring is done.
-
-   On successful row insert into Supabase, a Database Webhook (or trigger)
-   should call the same Edge Function the assessment uses to send a
-   confirmation email via DreamHost SMTP — subject:
-     "Your Visibility Playbook is on its way"
-   ========================================================================= */
-const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
 const SUPABASE_TABLE = "playbook_requests";
-
-const isPlaceholder = (v: string) => !v || v.startsWith("YOUR_");
 
 export default function PlaybookForm() {
   const [firstName, setFirstName] = useState("");
@@ -42,34 +30,15 @@ export default function PlaybookForm() {
     setSubmitting(true);
 
     const payload = {
+      visitor_token: getOrCreateVisitorToken(),
       first_name: fn,
       email: em,
-      requested_at: new Date().toISOString(),
     };
 
-    if (!isPlaceholder(SUPABASE_URL) && !isPlaceholder(SUPABASE_ANON_KEY)) {
-      try {
-        const res = await fetch(
-          `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${SUPABASE_TABLE}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              Prefer: "return=minimal",
-            },
-            body: JSON.stringify(payload),
-          }
-        );
-        if (!res.ok) {
-          // eslint-disable-next-line no-console
-          console.warn("Supabase playbook insert failed", res.status, await res.text().catch(() => ""));
-        }
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.warn("Supabase playbook insert errored", err);
-      }
+    const result = await insertRow(SUPABASE_TABLE, payload);
+    if (!result.ok) {
+      // eslint-disable-next-line no-console
+      console.warn("Playbook submission failed", result.status, result.error);
     }
 
     setSubmitting(false);
