@@ -512,14 +512,14 @@ p { margin: 0 0 var(--s-3); }
 .nav-link {
   font-size: var(--fs-sm);
   font-weight: 500;
-  color: var(--ink-soft);
+  color: var(--ink);
   text-decoration: none;
   letter-spacing: -0.005em;
   position: relative;
   padding-block: var(--s-2);
   white-space: nowrap;
 }
-.nav-link:hover { color: var(--ink); text-decoration: none; }
+.nav-link:hover { color: var(--accent); text-decoration: none; }
 .nav-link[aria-current="page"]::after {
   content: "";
   position: absolute;
@@ -548,8 +548,10 @@ p { margin: 0 0 var(--s-3); }
   border: 0;
   cursor: pointer;
   font: inherit;
+  color: var(--ink);
   text-align: left;
 }
+.nav-dropdown-trigger:hover { color: var(--accent); }
 .nav-dropdown-caret {
   display: inline-block;
   font-size: 0.7em;
@@ -1729,13 +1731,18 @@ body.has-dark-hero .site-header .nav-toggle span { background: #FFFFFF; }
 
 /* Once scrolled, header reverts to the cream paper treatment */
 body.has-dark-hero .site-header.is-scrolled {
-  background: rgba(241, 236, 227, 0.92);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
-  backdrop-filter: saturate(140%) blur(10px);
+  /* Frosted-glass / "mirror" effect — translucent paper with a strong
+     backdrop-filter so the page content scrolling underneath shows
+     through with a soft blur. */
+  background: rgba(241, 236, 227, 0.55);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  backdrop-filter: saturate(180%) blur(22px);
   border-bottom-color: var(--rule);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 8px 24px -16px rgba(26, 23, 20, 0.18);
 }
 body.has-dark-hero .site-header.is-scrolled .nav-brand,
-body.has-dark-hero .site-header.is-scrolled .nav-link { color: var(--ink-soft); }
+body.has-dark-hero .site-header.is-scrolled .nav-link,
+body.has-dark-hero .site-header.is-scrolled .nav-dropdown-trigger { color: var(--ink); }
 body.has-dark-hero .site-header.is-scrolled .nav-brand { color: var(--ink); }
 body.has-dark-hero .site-header.is-scrolled .nav-brand small { color: var(--muted); }
 body.has-dark-hero .site-header.is-scrolled .btn-primary {
