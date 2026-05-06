@@ -1743,18 +1743,13 @@ body.has-dark-hero .site-header .nav-toggle span { background: #FFFFFF; }
 
 /* Once scrolled, header reverts to the cream paper treatment */
 body.has-dark-hero .site-header.is-scrolled {
-  /* Heavy frosted-glass effect — translucent paper with a dramatic
-     blur/saturation so the scrolling content reads as a strong colour-
-     bloomed blur underneath. Tabs are foreground (solid ink), so they
-     stay legible even at 60% paper alpha. */
-  background: rgba(241, 236, 227, 0.6);
-  -webkit-backdrop-filter: saturate(200%) blur(30px);
-  backdrop-filter: saturate(200%) blur(30px);
-  border-bottom-color: rgba(214, 207, 194, 0.7);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.55) inset,
-    0 -1px 0 rgba(214, 207, 194, 0.4) inset,
-    0 12px 28px -18px rgba(26, 23, 20, 0.28);
+  /* Solid paper — no transparency once scrolled past the dramatic hero,
+     so scrolling content can't bleed through into the nav text. */
+  background: var(--paper);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: var(--rule);
+  box-shadow: 0 4px 18px -14px rgba(26, 23, 20, 0.2);
 }
 body.has-dark-hero .site-header.is-scrolled .nav-brand,
 body.has-dark-hero .site-header.is-scrolled .nav-link,
