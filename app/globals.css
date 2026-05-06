@@ -1743,12 +1743,13 @@ body.has-dark-hero .site-header .nav-toggle span { background: #FFFFFF; }
 
 /* Once scrolled, header reverts to the cream paper treatment */
 body.has-dark-hero .site-header.is-scrolled {
-  /* Solid paper — no transparency once scrolled past the dramatic hero,
-     so scrolling content can't bleed through into the nav text. */
-  background: var(--paper);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  border-bottom-color: var(--rule);
+  /* Solid paper once the user scrolls past the dramatic hero. The
+     !important is required to override the dark-hero rule above
+     (which forces transparent on the header over the hero region). */
+  background: var(--paper) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom-color: var(--rule) !important;
   box-shadow: 0 4px 18px -14px rgba(26, 23, 20, 0.2);
 }
 body.has-dark-hero .site-header.is-scrolled .nav-brand,
