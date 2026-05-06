@@ -856,18 +856,22 @@ p { margin: 0 0 var(--s-3); }
 }
 .proof-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--s-6) var(--s-5);
 }
 @media (min-width: 760px) {
-  .proof-grid { grid-template-columns: repeat(4, 1fr); gap: var(--s-5); }
+  .proof-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-5); }
 }
 .stat {
   display: flex;
   flex-direction: column;
   gap: var(--s-2);
   position: relative;
-  padding-left: var(--s-5);
+  padding-left: 0;
+  min-width: 0;
+}
+@media (min-width: 760px) {
+  .stat { padding-left: var(--s-5); }
 }
 @media (min-width: 760px) {
   .stat:not(:first-child)::before {
@@ -1544,6 +1548,9 @@ body.has-dark-hero .site-header.is-scrolled .nav-toggle span { background: var(-
 @media (max-width: 759px) {
   .hero-dramatic { min-height: 88vh; }
   .hero-dramatic-aside { display: none; }
+  /* Drop the intro pill and statement on mobile — wordmark + tagline + CTA only. */
+  .hero-dramatic .eyebrow-pill,
+  .hero-dramatic-h1 { display: none; }
   .hero-dramatic-bottom { grid-template-columns: 1fr; gap: var(--s-5); text-align: center; }
   .hero-dramatic-tagline { margin-inline: auto; }
   .hero-dramatic-meta { align-items: center; text-align: center; }
