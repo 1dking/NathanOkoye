@@ -41,7 +41,7 @@ export default function HomePage() {
 
           <div className="hero-dramatic-bottom">
             <p className="hero-dramatic-tagline">
-              I help established consultants close the gap between the reputation they've built and the brand that represents them.
+              I help consultants, coaches, and advisors close the gap between the expertise they've built and the brand that represents it — whether you're just finding your positioning or you've been doing this for 20 years.
             </p>
             <div className="cta-row">
               <Link href="/work-with-nathan" className="btn btn-on-ink btn-lg">Work with Nathan →</Link>
@@ -166,6 +166,16 @@ export default function HomePage() {
             <p className="case-desc">A performing arts organisation hadn't sold out in 15 years. Not because the product had declined, but because the content had been speaking to the same audience for so long it had forgotten how to speak to anyone new. Two months of repositioned content and structured performance marketing later, the event sold out for the first time in 15 years.</p>
             <div className="case-foot">
               <span className="case-meta">Read the full case study</span>
+              <span className="case-arrow" aria-hidden="true">→</span>
+            </div>
+          </Link>
+
+          <Link href="/case-study-origin" className="case-card">
+            <p className="eyebrow eyebrow-muted">[ The Origin Story ]</p>
+            <p className="case-outcome text-balance">15 years. The framework built from living the problem.</p>
+            <p className="case-desc">I spent 15 years as the invisible expert before I built the framework that made expertise visible. This is how the CORE framework was forged — not from theory, but from the specific failures that taught me what works when expertise needs to become authority.</p>
+            <div className="case-foot">
+              <span className="case-meta">Read the origin story</span>
               <span className="case-arrow" aria-hidden="true">→</span>
             </div>
           </Link>
