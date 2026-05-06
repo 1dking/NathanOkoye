@@ -467,6 +467,16 @@ p { margin: 0 0 var(--s-3); }
   gap: var(--s-3);
 }
 .nav-links.is-open .nav-link { padding-block: var(--s-3); }
+/* The mobile dropdown always sits on a paper background, so its links must
+   stay ink regardless of any dark-hero / dark-page parent override. */
+.site-header .nav-links.is-open .nav-link,
+.site-header .nav-links.is-open .nav-link:hover {
+  color: var(--ink);
+  text-shadow: none;
+}
+.site-header .nav-links.is-open .nav-link[aria-current="page"]::after {
+  background: var(--accent);
+}
 @media (min-width: 880px) {
   .nav-links { display: flex; }
   .nav-links.is-open {
