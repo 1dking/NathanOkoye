@@ -4,24 +4,14 @@ import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { sendMail } from "../_shared/smtp.ts";
 import {
-  getAssessmentStep,
-  getPlaybookStep,
-  PLAYBOOK_INTERVALS_DAYS,
-  SEQUENCE_INTERVALS_DAYS,
-  TierKey,
-} from "../_shared/sequences.ts";
+  applyVars,
+  getTemplate,
+  unsubscribeUrl,
+} from "../_shared/templates.ts";
 
 /**
- * Hourly cron job. Configure in Supabase:
- *   Database → Cron Jobs → New cron job
- *   Schedule: 0 * * * *  (every hour, on the hour)
- *   Command: select net.http_post(
- *     url   := 'https://<project>.supabase.co/functions/v1/process-sequences',
- *     headers := jsonb_build_object('Authorization', 'Bearer ' || (select value from vault.decrypted_secrets where name = 'service_role_key')),
- *     body  := '{}'::jsonb
- *   );
- *
- * Or simpler: trigger from any external scheduler that hits this URL hourly.
+ * Hourly cron — pulls every enrollment whose next_send_at has arrived
+ * and dispatches the matching email_templates row.
  */
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -29,11 +19,8 @@ serve(async (req: Request) => {
   }
 
   const supabase = getServiceClient();
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-
   const nowIso = new Date().toISOString();
 
-  // Pull every enrollment whose next-send time has arrived.
   const { data: due, error } = await supabase
     .from("sequence_enrollments")
     .select("*")
@@ -54,13 +41,10 @@ serve(async (req: Request) => {
     const stepIndex: number = enrollment.current_step ?? 1;
     const sequenceType: string = enrollment.sequence_type;
 
-    const stepDef =
-      sequenceType === "playbook"
-        ? getPlaybookStep(stepIndex)
-        : getAssessmentStep(sequenceType as TierKey, stepIndex);
+    const template = await getTemplate(sequenceType, stepIndex);
 
-    // No more steps in this sequence — mark complete and skip.
-    if (!stepDef) {
+    // No template at this step → sequence is finished.
+    if (!template) {
       await supabase
         .from("sequence_enrollments")
         .update({ completed: true })
@@ -69,14 +53,13 @@ serve(async (req: Request) => {
       continue;
     }
 
-    const unsubscribeUrl =
-      `${supabaseUrl}/functions/v1/unsubscribe?token=${enrollment.id}`;
-    const subject = stepDef.subject;
-    const html = stepDef.build(
-      enrollment.first_name,
-      enrollment.total_score ?? 0,
-      unsubscribeUrl,
-    );
+    const vars = {
+      first_name: enrollment.first_name,
+      score: enrollment.total_score ?? "",
+      unsubscribe_url: unsubscribeUrl(enrollment.id),
+    };
+    const subject = applyVars(template.subject, vars);
+    const html = applyVars(template.body_html, vars);
 
     let status: "sent" | "failed" = "sent";
     let errorText: string | null = null;
@@ -98,19 +81,12 @@ serve(async (req: Request) => {
       error: errorText,
     });
 
-    // Even if SMTP failed we advance the step — otherwise a single bad
-    // address would loop forever. Failures are visible in email_logs.
-
-    const intervals =
-      sequenceType === "playbook"
-        ? PLAYBOOK_INTERVALS_DAYS
-        : SEQUENCE_INTERVALS_DAYS[sequenceType as TierKey] ?? [];
-
+    // Advance step regardless of SMTP success — failures are logged, but
+    // a single bad address must not block the rest of the queue.
     const nextStepIndex = stepIndex + 1;
-    const nextInterval = intervals[nextStepIndex - 1]; // step1→intervals[0], step2→intervals[1], ...
+    const nextTemplate = await getTemplate(sequenceType, nextStepIndex);
 
-    if (typeof nextInterval !== "number") {
-      // Sequence is done.
+    if (!nextTemplate) {
       await supabase
         .from("sequence_enrollments")
         .update({ current_step: nextStepIndex, completed: true })
@@ -118,7 +94,7 @@ serve(async (req: Request) => {
       completed++;
     } else {
       const nextSendAt = new Date(
-        Date.now() + nextInterval * 24 * 60 * 60 * 1000,
+        Date.now() + nextTemplate.delay_days * 86400000,
       ).toISOString();
       await supabase
         .from("sequence_enrollments")

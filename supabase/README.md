@@ -3,33 +3,37 @@
 Project ref: `hfioxbfdcbqsuxgvsogy` ·
 URL: `https://hfioxbfdcbqsuxgvsogy.supabase.co`
 
-This folder contains everything needed to stand up the Phase 1 backend.
-
 ```
 supabase/
 ├── migrations/
-│   └── 20260506_phase_1_core.sql         # Run once in SQL editor
+│   └── 20260506_phase_1_core.sql       # 9 tables + 15 seeded email_templates
+├── scripts/
+│   └── build_phase_1.py                # regenerates the migration above
 ├── functions/
-│   ├── _shared/                          # cors, supabase client, smtp, sequences, email template
-│   ├── track-event/                      # POST  /functions/v1/track-event
-│   ├── on-assessment-submit/             # WEBHOOK from assessment_submissions INSERT
-│   ├── on-playbook-request/              # WEBHOOK from playbook_requests INSERT
-│   ├── process-sequences/                # CRON  every hour
-│   └── unsubscribe/                      # GET   /functions/v1/unsubscribe?token=…
-└── README.md (this file)
+│   ├── _shared/
+│   │   ├── cors.ts
+│   │   ├── supabase.ts                 # service-role client factory
+│   │   ├── smtp.ts                     # npm:nodemailer
+│   │   ├── templates.ts                # fetch template from DB + apply vars
+│   │   └── scoring.ts                  # lead-score weights
+│   ├── track-event/                    # POST /functions/v1/track-event
+│   ├── on-assessment-submit/           # webhook target
+│   ├── on-playbook-request/            # webhook target
+│   ├── process-sequences/              # cron target
+│   └── unsubscribe/                    # GET /functions/v1/unsubscribe?token=…
+└── README.md
 ```
 
 ## 1. Run the migration
 
-Open Supabase Dashboard → SQL Editor → New query.
-Paste the contents of `migrations/20260506_phase_1_core.sql` and run it.
+Dashboard → SQL Editor → New query → paste
+[`migrations/20260506_phase_1_core.sql`](./migrations/20260506_phase_1_core.sql)
+→ Run.
 
-The migration is idempotent (`if not exists` everywhere), so re-running is
-safe if anything fails partway through.
+The file is idempotent (`if not exists` everywhere; the seed deletes
+sequence rows before re-inserting). Re-run is safe.
 
 ## 2. Set Edge Function secrets
-
-Dashboard → Project Settings → Edge Functions → Manage secrets, **or** via CLI:
 
 ```bash
 supabase login
@@ -43,10 +47,9 @@ supabase secrets set \
   SMTP_FROM_NAME="Nathan Okoye"
 ```
 
-`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically
-into every Edge Function — you don't set those.
+`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are auto-injected.
 
-## 3. Deploy each Edge Function
+## 3. Deploy each function
 
 ```bash
 supabase functions deploy track-event
@@ -56,38 +59,26 @@ supabase functions deploy process-sequences
 supabase functions deploy unsubscribe
 ```
 
-(Or via Dashboard → Edge Functions → New → upload the folder for each.)
+The functions use `npm:nodemailer@6.9.13`. Supabase's runtime resolves
+`npm:` specifiers automatically — no extra config.
 
 ## 4. Wire the database webhooks
 
-Dashboard → Database → Webhooks → "Create a new hook":
+Dashboard → Database → Webhooks:
 
-**Hook 1 · `on-assessment-submit`**
-- Name: `on-assessment-submit`
-- Source table: `public.assessment_submissions`
-- Events: ☑ Insert (only)
-- Type: HTTP Request
-- URL: `https://hfioxbfdcbqsuxgvsogy.supabase.co/functions/v1/on-assessment-submit`
-- Method: POST
-- HTTP headers:
-  - `Content-Type: application/json`
-  - `Authorization: Bearer <<SUPABASE_SERVICE_ROLE_KEY>>`
+| Hook | Source | Events | URL |
+|---|---|---|---|
+| `on-assessment-submit` | `public.assessment_submissions` | INSERT | `https://hfioxbfdcbqsuxgvsogy.supabase.co/functions/v1/on-assessment-submit` |
+| `on-playbook-request` | `public.playbook_requests` | INSERT | `https://hfioxbfdcbqsuxgvsogy.supabase.co/functions/v1/on-playbook-request` |
 
-**Hook 2 · `on-playbook-request`**
-- Name: `on-playbook-request`
-- Source table: `public.playbook_requests`
-- Events: ☑ Insert (only)
-- Type: HTTP Request
-- URL: `https://hfioxbfdcbqsuxgvsogy.supabase.co/functions/v1/on-playbook-request`
-- Method: POST
-- Same headers as above
+Both need the header
+`Authorization: Bearer <SUPABASE_SERVICE_ROLE_KEY>`.
 
-## 5. Schedule the cron job
+## 5. Schedule the cron
 
-Dashboard → Database → Cron Jobs → New cron job:
+Dashboard → Database → Cron Jobs → New (requires `pg_net` extension):
 
-- Name: `process-sequences-hourly`
-- Schedule: `0 * * * *`  (every hour, on the hour)
+- Schedule: `0 * * * *`  (hourly)
 - Command:
 
 ```sql
@@ -95,23 +86,39 @@ select net.http_post(
   url     := 'https://hfioxbfdcbqsuxgvsogy.supabase.co/functions/v1/process-sequences',
   headers := jsonb_build_object(
     'Content-Type',  'application/json',
-    'Authorization', 'Bearer <<SUPABASE_SERVICE_ROLE_KEY>>'
+    'Authorization', 'Bearer <SUPABASE_SERVICE_ROLE_KEY>'
   ),
   body    := '{}'::jsonb
 );
 ```
 
-(Requires the `pg_net` extension — enable in Database → Extensions if not on.)
+## 6. Editing templates later
 
-## 6. Verify
+Every email body is a single row in `public.email_templates`. To edit
+copy, update `subject` or `body_html` directly in the table editor (or
+later via the admin dashboard built in Phase 2). Placeholders supported:
 
-- Submit a test row through the Next.js assessment form. The
-  `on-assessment-submit` webhook should fire and you should receive an email
-  within ~30s.
-- Check `email_logs` for `status='sent'`.
-- Check `sequence_enrollments` for the new row with `current_step=1` and
-  `next_send_at` ~3-7 days out.
-- The unsubscribe link in the email footer should resolve to a confirmation page.
+| Placeholder | Replaced by |
+|---|---|
+| `{{first_name}}` | recipient's first name |
+| `{{score}}` | total assessment score (assessment sequences only) |
+| `{{unsubscribe_url}}` | unsubscribe URL with the enrollment token |
+
+The Edge Functions read templates by `(sequence_type, step)` filtered to
+`active = true`. Set `active = false` to retire a template; insert a new
+row with `active = true` to replace it without losing the history.
+
+## 7. Regenerating the seed
+
+If the source-of-truth copy needs to be refreshed wholesale:
+
+```bash
+python supabase/scripts/build_phase_1.py
+# overwrites supabase/migrations/20260506_phase_1_core.sql
+```
+
+Then re-run the migration in the SQL editor — the seed `delete + insert`
+block resets all five sequences cleanly.
 
 ## Lead-score reference
 

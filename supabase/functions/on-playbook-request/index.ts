@@ -4,14 +4,15 @@ import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { sendMail } from "../_shared/smtp.ts";
 import {
-  getPlaybookConfirmationEmail,
-  PLAYBOOK_INTERVALS_DAYS,
-} from "../_shared/sequences.ts";
+  applyVars,
+  getTemplate,
+  unsubscribeUrl,
+} from "../_shared/templates.ts";
 
 /**
  * Webhook handler for INSERT on playbook_requests.
  * Sends the immediate "Your Visibility Playbook is on its way" email,
- * enrolls the address in the playbook sequence, mirrors to crm_leads.
+ * enrolls in the playbook sequence.
  */
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -38,13 +39,20 @@ serve(async (req: Request) => {
   }
 
   const supabase = getServiceClient();
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 
-  const nextSendAt = new Date(
-    Date.now() + (PLAYBOOK_INTERVALS_DAYS[0] ?? 7) * 24 * 60 * 60 * 1000,
-  );
+  const step0 = await getTemplate("playbook", 0);
+  if (!step0) {
+    return jsonResponse(
+      { error: "no active template for playbook step 0" },
+      { status: 500 },
+    );
+  }
+  const step1 = await getTemplate("playbook", 1);
 
-  /* --- 1. Enrollment --- */
+  const nextSendAt = step1
+    ? new Date(Date.now() + step1.delay_days * 86400000)
+    : new Date(Date.now() + 365 * 86400000);
+
   const { data: enrollment, error: enrollError } = await supabase
     .from("sequence_enrollments")
     .insert({
@@ -56,6 +64,7 @@ serve(async (req: Request) => {
       total_score: null,
       current_step: 1,
       next_send_at: nextSendAt.toISOString(),
+      completed: !step1,
     })
     .select()
     .single();
@@ -67,13 +76,12 @@ serve(async (req: Request) => {
     );
   }
 
-  const unsubscribeUrl =
-    `${supabaseUrl}/functions/v1/unsubscribe?token=${enrollment.id}`;
-
-  /* --- 2. Confirmation email --- */
-  const conf = getPlaybookConfirmationEmail();
-  const subject = conf.subject;
-  const html = conf.build(r.first_name, 0, unsubscribeUrl);
+  const vars = {
+    first_name: r.first_name,
+    unsubscribe_url: unsubscribeUrl(enrollment.id),
+  };
+  const subject = applyVars(step0.subject, vars);
+  const html = applyVars(step0.body_html, vars);
 
   let status: "sent" | "failed" = "sent";
   let errorText: string | null = null;
@@ -93,13 +101,11 @@ serve(async (req: Request) => {
     error: errorText,
   });
 
-  /* --- 3. Mark request as enrolled --- */
   await supabase
     .from("playbook_requests")
     .update({ sequence_enrolled: true })
     .eq("id", r.id);
 
-  /* --- 4. Upsert crm_leads --- */
   await supabase.from("crm_leads").upsert(
     {
       visitor_token: r.visitor_token ?? null,

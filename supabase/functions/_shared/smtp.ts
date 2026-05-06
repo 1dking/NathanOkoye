@@ -1,4 +1,5 @@
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+// deno-lint-ignore-file no-explicit-any
+import nodemailer from "npm:nodemailer@6.9.13";
 
 export interface SendArgs {
   to: string;
@@ -7,8 +8,11 @@ export interface SendArgs {
 }
 
 /**
- * Send a single email via DreamHost SMTP using the credentials in env.
- * Each call opens and closes its own connection so it's safe under concurrency.
+ * Send a single email via DreamHost SMTP using nodemailer.
+ * Reads SMTP_HOST/PORT/USER/PASS/FROM_NAME from the function's env.
+ *
+ * One transporter per call — Supabase Edge Functions don't share state
+ * across invocations reliably, so re-creating per call is the safer pattern.
  */
 export async function sendMail({ to, subject, html }: SendArgs): Promise<void> {
   const host = Deno.env.get("SMTP_HOST");
@@ -18,32 +22,28 @@ export async function sendMail({ to, subject, html }: SendArgs): Promise<void> {
   const fromName = Deno.env.get("SMTP_FROM_NAME") ?? "Nathan Okoye";
 
   if (!host || !user || !pass) {
-    throw new Error("SMTP_HOST, SMTP_USER, SMTP_PASS must be set");
+    throw new Error("SMTP_HOST / SMTP_USER / SMTP_PASS must all be set");
   }
 
-  const smtp = new SMTPClient({
-    connection: {
-      hostname: host,
-      port,
-      tls: port === 465,
-      auth: { username: user, password: pass },
-    },
+  const transporter = (nodemailer as any).createTransport({
+    host,
+    port,
+    secure: port === 465, // true for 465, false for 587
+    auth: { user, pass },
   });
 
+  await transporter.sendMail({
+    from: `${fromName} <${user}>`,
+    to,
+    replyTo: user,
+    subject,
+    html,
+  });
+
+  // Best-effort close — nodemailer's pool variants need it; SMTP variant is a no-op.
   try {
-    await smtp.send({
-      from: `${fromName} <${user}>`,
-      to,
-      replyTo: user,
-      subject,
-      html,
-      content: "auto",
-    });
-  } finally {
-    try {
-      await smtp.close();
-    } catch {
-      // ignore close errors
-    }
+    transporter.close?.();
+  } catch {
+    // ignore
   }
 }
