@@ -1743,14 +1743,18 @@ body.has-dark-hero .site-header .nav-toggle span { background: #FFFFFF; }
 
 /* Once scrolled, header reverts to the cream paper treatment */
 body.has-dark-hero .site-header.is-scrolled {
-  /* Frosted-glass / "mirror" effect — paper at 78% with a heavy backdrop
-     blur, so scrolling content shows through as a soft blur but the nav
-     stays unambiguously legible. */
-  background: rgba(241, 236, 227, 0.78);
-  -webkit-backdrop-filter: saturate(180%) blur(22px);
-  backdrop-filter: saturate(180%) blur(22px);
-  border-bottom-color: var(--rule);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 8px 24px -16px rgba(26, 23, 20, 0.22);
+  /* Heavy frosted-glass effect — translucent paper with a dramatic
+     blur/saturation so the scrolling content reads as a strong colour-
+     bloomed blur underneath. Tabs are foreground (solid ink), so they
+     stay legible even at 60% paper alpha. */
+  background: rgba(241, 236, 227, 0.6);
+  -webkit-backdrop-filter: saturate(200%) blur(30px);
+  backdrop-filter: saturate(200%) blur(30px);
+  border-bottom-color: rgba(214, 207, 194, 0.7);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 -1px 0 rgba(214, 207, 194, 0.4) inset,
+    0 12px 28px -18px rgba(26, 23, 20, 0.28);
 }
 body.has-dark-hero .site-header.is-scrolled .nav-brand,
 body.has-dark-hero .site-header.is-scrolled .nav-link,
