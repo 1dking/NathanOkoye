@@ -1,7 +1,44 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import StickyBar from "@/components/StickyBar";
+
+type Tier = "low" | "medium" | "high";
+
+function readTier(): Tier {
+  const v = cookies().get("nate_tier")?.value;
+  return v === "medium" || v === "high" ? v : "low";
+}
 
 export default function HomePage() {
+  const tier = readTier();
+
+  // Per-variant content — base layout is identical across tiers.
+  const heroTagline =
+    tier === "medium"
+      ? "You have been here before. The gap you are thinking about is real and closeable."
+      : "I help consultants, coaches, and advisors close the gap between the expertise they've built and the brand that represents it — whether you're just finding your positioning or you've been doing this for 20 years.";
+
+  const heroCtaLabel =
+    tier === "high" ? "Book The CORE Discovery Session →" : "Work with Nathan →";
+
+  const closingHeadline =
+    tier === "high"
+      ? "You are ready. Let us close the gap."
+      : "Ready to close the gap?";
+
+  const closingCtaLabel =
+    tier === "medium"
+      ? "Find out exactly where your gap is →"
+      : "Book a strategy call with Nathan →";
+  const closingCtaHref =
+    tier === "medium" ? "/assessment" : "/work-with-nathan";
+
+  // Stat highlight set: medium highlights only the $75M stat;
+  // high highlights all four.
+  const allStatsHighlighted = tier === "high";
+  const firstStatHighlighted = tier === "medium" || tier === "high";
+
   return (
     <>
 {/* HERO dark dramatic, portrait as background */}
@@ -41,10 +78,10 @@ export default function HomePage() {
 
           <div className="hero-dramatic-bottom">
             <p className="hero-dramatic-tagline">
-              I help consultants, coaches, and advisors close the gap between the expertise they've built and the brand that represents it — whether you're just finding your positioning or you've been doing this for 20 years.
+              {heroTagline}
             </p>
             <div className="cta-row">
-              <Link href="/work-with-nathan" className="btn btn-on-ink btn-lg">Work with Nathan →</Link>
+              <Link href="/work-with-nathan" className="btn btn-on-ink btn-lg">{heroCtaLabel}</Link>
             </div>
             <div className="hero-dramatic-meta">
               <div className="hero-dramatic-meta-item"><strong>$75M+</strong><span>engagement acquired</span></div>
@@ -56,23 +93,36 @@ export default function HomePage() {
       </div>
     </section>
 
+    {/* HIGH-intent banner — only rendered when tier === 'high'. */}
+    {tier === "high" && (
+      <section className="high-banner" aria-label="Discovery Session next step">
+        <div className="container">
+          <p>
+            You have been here before. You already know what you need.
+            The Discovery Session is the next step.
+          </p>
+          <Link href="/work-with-nathan" className="btn btn-lg">Book now →</Link>
+        </div>
+      </section>
+    )}
+
     {/* PROOF BAR */}
     <section id="proof-bar" className="proof-bar">
       <div className="container">
         <dl className="proof-grid">
-          <div className="stat">
+          <div className={`stat${firstStatHighlighted ? " is-highlighted" : ""}`}>
             <dt className="stat-number">$75M<span className="unit">+</span></dt>
             <dd className="stat-label">Engagement acquired by a senior advisor through positioning alone</dd>
           </div>
-          <div className="stat">
+          <div className={`stat${allStatsHighlighted ? " is-highlighted" : ""}`}>
             <dt className="stat-number">15,000</dt>
             <dd className="stat-label">People who showed up for a brand built from nothing</dd>
           </div>
-          <div className="stat">
+          <div className={`stat${allStatsHighlighted ? " is-highlighted" : ""}`}>
             <dt className="stat-number">$39K</dt>
             <dd className="stat-label">Revenue unlocked by repositioning an expert's first product</dd>
           </div>
-          <div className="stat">
+          <div className={`stat${allStatsHighlighted ? " is-highlighted" : ""}`}>
             <dt className="stat-number">15<span className="unit">yrs</span></dt>
             <dd className="stat-label">First sold-out event for an established organisation</dd>
           </div>
@@ -279,15 +329,18 @@ export default function HomePage() {
     <section id="cta" className="cta-banner">
       <div className="container">
         <p className="eyebrow eyebrow-plain" style={{ display: 'block', textAlign: 'center', marginBottom: '1.25rem' }}>Ready</p>
-        <h2 className="text-balance">Ready to close the gap?</h2>
+        <h2 className="text-balance">{closingHeadline}</h2>
         <p>The first step is a conversation, not a pitch. I want to understand where the gap is before I tell you what the work looks like. If we are the right fit, we will know it quickly.</p>
         <p>If you are a consultant or advisor whose brand does not yet reflect the work you do, this is where that changes.</p>
         <div className="cta-row">
-          <Link href="/work-with-nathan" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</Link>
+          <Link href={closingCtaHref} className="btn btn-primary btn-lg">{closingCtaLabel}</Link>
           <Link href="/case-study-advisor" className="link-arrow">Read the case studies first</Link>
         </div>
       </div>
     </section>
+
+    {/* MEDIUM-intent sticky bar — fixed position so no layout shift. */}
+    {tier === "medium" && <StickyBar />}
     </>
   );
 }

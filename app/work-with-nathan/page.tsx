@@ -1,12 +1,22 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Work With Nathan Okoye",
   description: "Nathan Okoye works with a small number of consultants at a time. Every engagement begins with The CORE Discovery Session, a paid session that identifies exactly where your brand gap is and what it is costing you.",
 };
 
+type Tier = "low" | "medium" | "high";
+
+function readTier(): Tier {
+  const v = cookies().get("nate_tier")?.value;
+  return v === "medium" || v === "high" ? v : "low";
+}
+
 export default function WorkWithNathanPage() {
+  const tier = readTier();
+
   return (
     <>
 {/* HERO */}
@@ -26,6 +36,19 @@ export default function WorkWithNathanPage() {
         </div>
       </div>
     </section>
+
+    {/* MEDIUM-intent banner — only when tier === 'medium'. */}
+    {tier === "medium" && (
+      <section className="medium-banner" aria-label="Read the case studies first">
+        <div className="container">
+          <p>
+            Most people who reach this page have already read the case studies.
+            If you have not — start there.
+          </p>
+          <a href="/#case-studies">See the results →</a>
+        </div>
+      </section>
+    )}
 
     {/* SECTION 1 HOW NATHAN WORKS */}
     <section className="section">
@@ -160,8 +183,18 @@ export default function WorkWithNathanPage() {
         <h2 className="text-balance">One starting point. One action.</h2>
         <p>Every engagement begins with The CORE Discovery Session. There is no other entry point, no taster call, no free assessment. The session is the work. It is where the clarity starts.</p>
         <p>If you are a consultant whose brand does not yet reflect what you have built, this is where that changes.</p>
-        <div className="cta-row">
-          <a href="mailto:nathan@ocidm.com?subject=CORE%20Discovery%20Session%20enquiry" className="btn btn-primary btn-lg">Book The CORE Discovery Session →</a>
+        <div className="cta-row" style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <a
+            href="mailto:nathan@ocidm.com?subject=CORE%20Discovery%20Session%20enquiry"
+            className={`btn btn-primary btn-lg${tier === "high" ? " pulse-cta" : ""}`}
+          >
+            Book The CORE Discovery Session →
+          </a>
+          {tier === "high" && (
+            <p className="urgency-line">
+              Nathan works with a maximum of three clients at a time.
+            </p>
+          )}
         </div>
       </div>
     </section>

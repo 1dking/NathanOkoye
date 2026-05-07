@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { track } from "@/lib/tracker";
+import { getOrCreateVisitorToken } from "@/lib/visitor";
 
 const SECTION_IDS = [
   "hero",
@@ -36,6 +37,21 @@ export default function Tracker() {
       sections: new Set(),
     };
   }, [pathname]);
+
+  // Mirror the visitor token to a cookie so middleware can read it
+  // server-side without an extra DB call.
+  useEffect(() => {
+    try {
+      const token = getOrCreateVisitorToken();
+      const isProd = process.env.NODE_ENV === "production";
+      document.cookie =
+        `nate_visitor=${encodeURIComponent(token)}` +
+        `; path=/; max-age=31536000; samesite=lax` +
+        (isProd ? "; secure" : "");
+    } catch {
+      // cookie write blocked — middleware will default to 'low' tier
+    }
+  }, []);
 
   // page_view + case_study_open on every (re)navigation.
   useEffect(() => {
