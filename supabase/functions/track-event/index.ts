@@ -2,7 +2,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
-import { EVENT_SCORES, tierFromScore } from "../_shared/scoring.ts";
+import { tierFromScore } from "../_shared/scoring.ts";
 
 interface TrackEventBody {
   visitor_token?: string;
@@ -13,9 +13,7 @@ interface TrackEventBody {
   metadata?: Record<string, any> | null;
 }
 
-const RETURN_VISIT_GAP_MS = 60 * 60 * 1000; // 1h gap = new visit
-const MAX_RETURN_VISIT_BONUS_VISITS = 3;
-const RETURN_VISIT_BONUS_PER_VISIT = 10;
+const RETURN_VISIT_GAP_MS = 60 * 60 * 1000; // 1h gap = new visit (analytics only)
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -45,7 +43,10 @@ serve(async (req: Request) => {
 
   const supabase = getServiceClient();
 
-  /* ---------- 1. Upsert visitor ---------- */
+  /* ---------- 1. Upsert visitor (analytics columns only) ----------
+   * visit_count tracking here is for analytics. Lead scoring uses
+   * `return_visit` events from behavioral_events, scored by the
+   * calculate_lead_score() Postgres function — not visit_count. */
   const { data: existing } = await supabase
     .from("visitors")
     .select("visit_count, last_seen_at")
@@ -61,13 +62,6 @@ serve(async (req: Request) => {
     if (Date.now() - lastSeen > RETURN_VISIT_GAP_MS) {
       visit_count += 1;
     }
-    await supabase
-      .from("visitors")
-      .update({
-        last_seen_at: new Date().toISOString(),
-        visit_count,
-      })
-      .eq("visitor_token", visitor_token);
   } else {
     await supabase.from("visitors").insert({
       visitor_token,
@@ -75,73 +69,107 @@ serve(async (req: Request) => {
     });
   }
 
-  /* ---------- 2. Insert behavioral event ---------- */
-  await supabase.from("behavioral_events").insert({
-    visitor_token,
-    event_type,
-    page,
-    section: body.section ?? null,
-    value: body.value ?? null,
-    metadata: body.metadata ?? null,
-  });
-
-  /* ---------- 3. Recalculate lead score ---------- */
-  const { data: events } = await supabase
+  /* ---------- 2. Insert behavioral event (CRITICAL PATH) ----------
+   * Failures here propagate as 500 — score recalc below is best-effort. */
+  const { error: insertErr } = await supabase
     .from("behavioral_events")
-    .select("event_type")
-    .eq("visitor_token", visitor_token);
-
-  let lead_score = 0;
-  for (const e of events ?? []) {
-    lead_score += EVENT_SCORES[e.event_type] ?? 0;
-  }
-  // Return-visit bonus, capped.
-  const bonusVisits = Math.min(
-    Math.max(visit_count - 1, 0),
-    MAX_RETURN_VISIT_BONUS_VISITS,
-  );
-  lead_score += bonusVisits * RETURN_VISIT_BONUS_PER_VISIT;
-
-  const intent_tier = tierFromScore(lead_score);
-
-  /* ---------- 4. Save score to visitors ---------- */
-  await supabase
-    .from("visitors")
-    .update({ lead_score, intent_tier })
-    .eq("visitor_token", visitor_token);
-
-  /* ---------- 5. Mirror to crm_leads if email known ---------- */
-  // We only have an email if the visitor has previously submitted a form.
-  // Look up by visitor_token in assessment_submissions / playbook_requests.
-  const { data: a } = await supabase
-    .from("assessment_submissions")
-    .select("first_name, email")
-    .eq("visitor_token", visitor_token)
-    .order("submitted_at", { ascending: false })
-    .limit(1);
-  const { data: p } = await supabase
-    .from("playbook_requests")
-    .select("first_name, email")
-    .eq("visitor_token", visitor_token)
-    .order("requested_at", { ascending: false })
-    .limit(1);
-
-  const knownEmail =
-    (a?.[0]?.email as string | undefined) ??
-    (p?.[0]?.email as string | undefined);
-  if (knownEmail) {
-    const knownFirstName = a?.[0]?.first_name ?? p?.[0]?.first_name ?? null;
-    await supabase.from("crm_leads").upsert(
-      {
-        visitor_token,
-        first_name: knownFirstName,
-        email: knownEmail,
-        lead_score,
-        intent_tier,
-      },
-      { onConflict: "email" },
+    .insert({
+      visitor_token,
+      event_type,
+      page,
+      section: body.section ?? null,
+      value: body.value ?? null,
+      metadata: body.metadata ?? null,
+    });
+  if (insertErr) {
+    return jsonResponse(
+      { error: "event insert failed", detail: insertErr.message },
+      { status: 500 },
     );
   }
 
-  return jsonResponse({ visitor_token, lead_score, intent_tier });
+  /* ---------- 3. Best-effort score recalc + propagation ---------- */
+  let lead_score = 0;
+  let intent_tier = tierFromScore(0);
+  let events_counted = 0;
+  let scoring_ok = false;
+
+  try {
+    const { data: scoreData, error: rpcErr } = await supabase.rpc(
+      "calculate_lead_score",
+      { p_visitor_token: visitor_token },
+    );
+    if (rpcErr) throw rpcErr;
+    lead_score = typeof scoreData === "number" ? scoreData : 0;
+    intent_tier = tierFromScore(lead_score);
+
+    const { count } = await supabase
+      .from("behavioral_events")
+      .select("id", { count: "exact", head: true })
+      .eq("visitor_token", visitor_token);
+    events_counted = count ?? 0;
+    scoring_ok = true;
+  } catch (e) {
+    console.warn("[track-event] score recalc failed:", e);
+  }
+
+  if (scoring_ok) {
+    try {
+      await supabase
+        .from("visitors")
+        .update({
+          last_seen_at: new Date().toISOString(),
+          visit_count,
+          lead_score,
+          intent_tier,
+        })
+        .eq("visitor_token", visitor_token);
+    } catch (e) {
+      console.warn("[track-event] visitors update failed:", e);
+    }
+
+    /* ---------- 4. Mirror to crm_leads if email known ---------- */
+    try {
+      const { data: a } = await supabase
+        .from("assessment_submissions")
+        .select("first_name, email")
+        .eq("visitor_token", visitor_token)
+        .order("submitted_at", { ascending: false })
+        .limit(1);
+      const { data: p } = await supabase
+        .from("playbook_requests")
+        .select("first_name, email")
+        .eq("visitor_token", visitor_token)
+        .order("requested_at", { ascending: false })
+        .limit(1);
+
+      const knownEmail =
+        (a?.[0]?.email as string | undefined) ??
+        (p?.[0]?.email as string | undefined);
+      if (knownEmail) {
+        const knownFirstName =
+          a?.[0]?.first_name ?? p?.[0]?.first_name ?? null;
+        await supabase.from("crm_leads").upsert(
+          {
+            visitor_token,
+            first_name: knownFirstName,
+            email: knownEmail,
+            lead_score,
+            intent_tier,
+            // updated_at is set automatically by trg_crm_leads_updated_at
+          },
+          { onConflict: "email" },
+        );
+      }
+    } catch (e) {
+      console.warn("[track-event] crm_leads upsert failed:", e);
+    }
+  }
+
+  return jsonResponse({
+    visitor_token,
+    lead_score,
+    intent_tier,
+    events_counted,
+  });
 });

@@ -1,16 +1,11 @@
-/** Per-event lead-score weights. */
-export const EVENT_SCORES: Record<string, number> = {
-  page_view: 1,
-  scroll_50: 2,
-  scroll_90: 3,
-  case_study_open: 5,
-  work_with_nathan_visit: 8,
-  assessment_started: 10,
-  assessment_completed: 20,
-  playbook_requested: 15,
-  booking_clicked: 25,
-};
-
+/**
+ * Tier breaks for the lead-scoring engine.
+ *
+ * The score itself is computed by the public.calculate_lead_score(text)
+ * Postgres function — see supabase/migrations/ for the canonical rules.
+ * Keeping the tier mapping in TypeScript so callers can label a score
+ * without an extra round trip to Postgres.
+ */
 export function tierFromScore(score: number): "low" | "medium" | "high" {
   if (score >= 51) return "high";
   if (score >= 21) return "medium";
