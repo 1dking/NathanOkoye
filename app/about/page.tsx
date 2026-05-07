@@ -146,7 +146,7 @@ export default function AboutPage() {
         <p>If that is where you are, the gap is not a mystery. It is a positioning problem with a clear solution. I have closed it enough times to know exactly where to start.</p>
         <p>The first conversation is about understanding your situation, not pitching a programme. If there is a fit, we will know it quickly.</p>
         <div className="cta-row">
-          <Link href="/work-with-nathan" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</Link>
+          <a href="#" data-arivio-widget="open" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</a>
           <Link href="/case-study-advisor" className="link-arrow">See the case studies</Link>
         </div>
       </div>

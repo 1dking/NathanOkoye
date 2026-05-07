@@ -237,7 +237,7 @@ export default function CoreFrameworkPage() {
         <p>You can learn it independently through the resources and programme available here. You can go through a structured implementation with Nathan's guidance. Or you can have it built for you by Nathan's team, end to end.</p>
         <p>The right starting point is a conversation. Not a pitch. A conversation about where the gap is and what closing it would make possible.</p>
         <div className="cta-row">
-          <Link href="/work-with-nathan" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</Link>
+          <a href="#" data-arivio-widget="open" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</a>
           <Link href="/case-study-advisor" className="link-arrow">Read the case studies first</Link>
         </div>
       </div>

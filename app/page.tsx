@@ -21,6 +21,9 @@ export default function HomePage() {
 
   const heroCtaLabel =
     tier === "high" ? "Book The CORE Discovery Session →" : "Work with Nathan →";
+  // High tier triggers the Arivio booking widget; lower tiers still
+  // navigate to /work-with-nathan to read the engagement page first.
+  const heroCtaIsWidget = tier === "high";
 
   const closingHeadline =
     tier === "high"
@@ -33,6 +36,9 @@ export default function HomePage() {
       : "Book a strategy call with Nathan →";
   const closingCtaHref =
     tier === "medium" ? "/assessment" : "/work-with-nathan";
+  // Low/high closing CTA opens the booking widget; medium points at
+  // the assessment so we keep the page-link variant.
+  const closingCtaIsWidget = tier !== "medium";
 
   // Stat highlight set: medium highlights only the $75M stat;
   // high highlights all four.
@@ -81,7 +87,11 @@ export default function HomePage() {
               {heroTagline}
             </p>
             <div className="cta-row">
-              <Link href="/work-with-nathan" className="btn btn-on-ink btn-lg">{heroCtaLabel}</Link>
+              {heroCtaIsWidget ? (
+                <a href="#" data-arivio-widget="open" className="btn btn-on-ink btn-lg">{heroCtaLabel}</a>
+              ) : (
+                <Link href="/work-with-nathan" className="btn btn-on-ink btn-lg">{heroCtaLabel}</Link>
+              )}
             </div>
             <div className="hero-dramatic-meta">
               <div className="hero-dramatic-meta-item"><strong>$75M+</strong><span>engagement acquired</span></div>
@@ -101,7 +111,7 @@ export default function HomePage() {
             You have been here before. You already know what you need.
             The Discovery Session is the next step.
           </p>
-          <Link href="/work-with-nathan" className="btn btn-lg">Book now →</Link>
+          <a href="#" data-arivio-widget="open" className="btn btn-lg">Book now →</a>
         </div>
       </section>
     )}
@@ -320,7 +330,7 @@ export default function HomePage() {
           <p>You have tried posting consistently. You have tried explaining what you do more clearly. You have tried being more active on LinkedIn. And the pipeline has not moved the way your track record says it should.</p>
           <p>That is a positioning problem. Not a consistency problem. Not a content problem. Not a confidence problem, though confidence follows positioning and not the other way around.</p>
           <p>If your work is stronger than your pipeline, that gap is closeable. It has been closed for every client in the case studies above. It can be closed for you.</p>
-          <Link href="/work-with-nathan" className="link-arrow mt-5">Start the conversation</Link>
+          <a href="#" data-arivio-widget="open" className="link-arrow mt-5">Start the conversation</a>
         </div>
       </div>
     </section>
@@ -333,7 +343,11 @@ export default function HomePage() {
         <p>The first step is a conversation, not a pitch. I want to understand where the gap is before I tell you what the work looks like. If we are the right fit, we will know it quickly.</p>
         <p>If you are a consultant or advisor whose brand does not yet reflect the work you do, this is where that changes.</p>
         <div className="cta-row">
-          <Link href={closingCtaHref} className="btn btn-primary btn-lg">{closingCtaLabel}</Link>
+          {closingCtaIsWidget ? (
+            <a href="#" data-arivio-widget="open" className="btn btn-primary btn-lg">{closingCtaLabel}</a>
+          ) : (
+            <Link href={closingCtaHref} className="btn btn-primary btn-lg">{closingCtaLabel}</Link>
+          )}
           <Link href="/case-study-advisor" className="link-arrow">Read the case studies first</Link>
         </div>
       </div>

@@ -31,7 +31,7 @@ export default function WorkWithNathanPage() {
             I work with a small number of consultants at a time. The starting point is always the same: a paid session that tells you exactly where the gap is and what it is costing you.
           </p>
           <div className="cta-row">
-            <a href="#book" className="btn btn-primary btn-lg">Book The CORE Discovery Session →</a>
+            <a href="#" data-arivio-widget="open" className="btn btn-primary btn-lg">Book The CORE Discovery Session →</a>
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@ export default function WorkWithNathanPage() {
         </div>
 
         <div className="cta-row">
-          <a href="#book" className="btn btn-primary">Book The CORE Discovery Session →</a>
+          <a href="#" data-arivio-widget="open" className="btn btn-primary">Book The CORE Discovery Session →</a>
         </div>
       </div>
     </section>
@@ -185,7 +185,8 @@ export default function WorkWithNathanPage() {
         <p>If you are a consultant whose brand does not yet reflect what you have built, this is where that changes.</p>
         <div className="cta-row" style={{ flexDirection: 'column', alignItems: 'center' }}>
           <a
-            href="mailto:nathan@ocidm.com?subject=CORE%20Discovery%20Session%20enquiry"
+            href="#"
+            data-arivio-widget="open"
             className={`btn btn-primary btn-lg${tier === "high" ? " pulse-cta" : ""}`}
           >
             Book The CORE Discovery Session →

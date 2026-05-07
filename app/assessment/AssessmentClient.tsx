@@ -61,6 +61,9 @@ interface Tier {
   focus: string;
   ctaText: string;
   ctaHref: string;
+  // When true, the result CTA opens the Arivio booking widget instead
+  // of navigating to ctaHref.
+  ctaArivio?: boolean;
 }
 
 const TIERS: Tier[] = [
@@ -107,6 +110,7 @@ const TIERS: Tier[] = [
       "Identity before everything. Nothing built on an unclear foundation will compound. The CORE framework starts with one question who are you to the people you serve, and does anything you are currently putting into the world reflect that accurately?",
     ctaText: "Book The CORE Discovery Session →",
     ctaHref: "/work-with-nathan",
+    ctaArivio: true,
   },
 ];
 
@@ -415,9 +419,15 @@ export default function AssessmentClient() {
                   </p>
                 </div>
                 <div className="tier-cta cta-row">
-                  <Link href={submitted.tier.ctaHref} className="btn btn-lg">
-                    {submitted.tier.ctaText}
-                  </Link>
+                  {submitted.tier.ctaArivio ? (
+                    <a href="#" data-arivio-widget="open" className="btn btn-lg">
+                      {submitted.tier.ctaText}
+                    </a>
+                  ) : (
+                    <Link href={submitted.tier.ctaHref} className="btn btn-lg">
+                      {submitted.tier.ctaText}
+                    </Link>
+                  )}
                 </div>
               </div>
 

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const DISMISS_KEY = "nate_bar_dismissed";
@@ -34,9 +33,9 @@ export default function StickyBar() {
   return (
     <div className="sticky-bar" role="region" aria-label="Next step">
       <p>Ready to take the next step?</p>
-      <Link href="/work-with-nathan" className="btn sticky-bar-btn">
+      <a href="#" data-arivio-widget="open" className="btn sticky-bar-btn">
         Book a strategy call →
-      </Link>
+      </a>
       <button
         type="button"
         className="sticky-bar-dismiss"

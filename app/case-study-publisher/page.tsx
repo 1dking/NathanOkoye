@@ -215,7 +215,7 @@ export default function CaseStudyPublisherPage() {
         <h2 className="text-balance">If your work is stronger than your pipeline, the gap is closeable.</h2>
         <p>The first step is a conversation. Not a pitch. A conversation about where the gap is, and what closing it would make possible.</p>
         <div className="cta-row">
-          <Link href="/work-with-nathan" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</Link>
+          <a href="#" data-arivio-widget="open" className="btn btn-primary btn-lg">Book a strategy call with Nathan →</a>
         </div>
       </div>
     </section>
