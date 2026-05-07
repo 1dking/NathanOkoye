@@ -8,10 +8,17 @@
 # function — they don't need to be set as secrets.
 #
 # Usage:
-#   1. Fill in the four blank values in .env.local
-#   2. supabase login            (once)
+#   1. Fill in SMTP_* values in .env.local
+#   2. Either:
+#        a. Add SUPABASE_ACCESS_TOKEN=sbp_... to .env.local (recommended,
+#           non-interactive — generate at
+#           https://supabase.com/dashboard/account/tokens), OR
+#        b. Run `supabase login` once interactively
 #   3. supabase link --project-ref hfioxbfdcbqsuxgvsogy   (once)
 #   4. ./scripts/set-supabase-secrets.sh
+#
+# If the `supabase` CLI isn't installed globally, the script falls back to
+# `npx --yes supabase` (downloads on first run).
 #
 # After running:
 #   supabase secrets list        # to verify
@@ -29,9 +36,16 @@ if [[ ! -f "$ENV_FILE" ]]; then
   exit 1
 fi
 
-if ! command -v supabase >/dev/null 2>&1; then
-  echo "Error: 'supabase' CLI not found in PATH." >&2
-  echo "  Install: https://supabase.com/docs/guides/cli/getting-started" >&2
+# Pick a Supabase CLI invocation: prefer a global install, otherwise npx.
+if command -v supabase >/dev/null 2>&1; then
+  SUPABASE_CMD=(supabase)
+elif command -v npx >/dev/null 2>&1; then
+  echo "→ 'supabase' not in PATH; falling back to 'npx --yes supabase'."
+  SUPABASE_CMD=(npx --yes supabase)
+else
+  echo "Error: neither 'supabase' nor 'npx' found in PATH." >&2
+  echo "  Install Supabase CLI: https://supabase.com/docs/guides/cli/getting-started" >&2
+  echo "  Or install Node.js (which provides npx): https://nodejs.org" >&2
   exit 1
 fi
 
@@ -65,6 +79,17 @@ require() {
   printf '%s' "$value"
 }
 
+# ---- Auto-export SUPABASE_ACCESS_TOKEN if present in .env.local -----
+# The CLI reads SUPABASE_ACCESS_TOKEN from the environment, so plumbing it
+# through here lets the script run non-interactively (no `supabase login`).
+if [[ -z "${SUPABASE_ACCESS_TOKEN:-}" ]]; then
+  TOKEN_FROM_FILE="$(read_env SUPABASE_ACCESS_TOKEN || true)"
+  if [[ -n "$TOKEN_FROM_FILE" ]]; then
+    export SUPABASE_ACCESS_TOKEN="$TOKEN_FROM_FILE"
+    echo "→ Loaded SUPABASE_ACCESS_TOKEN from $ENV_FILE."
+  fi
+fi
+
 # ---- Pull the five SMTP values --------------------------------------
 SMTP_HOST="$(require SMTP_HOST)"
 SMTP_PORT="$(require SMTP_PORT)"
@@ -81,7 +106,7 @@ echo "    SMTP_PASS       = $(printf '%s' "$SMTP_PASS" | sed 's/./•/g')"   # m
 echo "    SMTP_FROM_NAME  = $SMTP_FROM_NAME"
 echo ""
 
-supabase secrets set \
+"${SUPABASE_CMD[@]}" secrets set \
   SMTP_HOST="$SMTP_HOST" \
   SMTP_PORT="$SMTP_PORT" \
   SMTP_USER="$SMTP_USER" \
@@ -89,4 +114,4 @@ supabase secrets set \
   SMTP_FROM_NAME="$SMTP_FROM_NAME"
 
 echo ""
-echo "✓ Secrets set. Verify with: supabase secrets list"
+echo "✓ Secrets set. Verify with: ${SUPABASE_CMD[*]} secrets list"

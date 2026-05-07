@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" width="200" height="40" role="img" aria-label="Nathan Okoye monogram" fill="none" stroke="#F0EBE3" stroke-width="3.5" stroke-linecap="butt" stroke-linejoin="miter">
+  <line x1="60" y1="6" x2="60" y2="34"/>
+  <line x1="82" y1="6" x2="82" y2="34"/>
+  <line x1="60" y1="6" x2="82" y2="34"/>
+  <circle cx="100" cy="20" r="2.5" fill="#F0EBE3" stroke="none"/>
+  <circle cx="128" cy="20" r="13"/>
+</svg>

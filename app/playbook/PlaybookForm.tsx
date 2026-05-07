@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { insertRow } from "@/lib/supabase";
 import { getOrCreateVisitorToken } from "@/lib/visitor";
+import { track } from "@/lib/tracker";
 
 const SUPABASE_TABLE = "playbook_requests";
 
@@ -39,6 +40,8 @@ export default function PlaybookForm() {
     if (!result.ok) {
       // eslint-disable-next-line no-console
       console.warn("Playbook submission failed", result.status, result.error);
+    } else {
+      track("playbook_requested");
     }
 
     setSubmitting(false);

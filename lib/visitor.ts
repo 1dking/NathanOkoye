@@ -6,7 +6,7 @@
  * device, and the token is never tied to PII unless they submit a form.
  */
 
-const STORAGE_KEY = "no_visitor_token";
+const STORAGE_KEY = "nate_visitor";
 
 export function getOrCreateVisitorToken(): string {
   if (typeof window === "undefined") {

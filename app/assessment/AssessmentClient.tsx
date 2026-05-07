@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { insertRow } from "@/lib/supabase";
 import { getOrCreateVisitorToken } from "@/lib/visitor";
+import { track } from "@/lib/tracker";
 
 const SUPABASE_TABLE = "assessment_submissions";
 
@@ -130,6 +131,7 @@ export default function AssessmentClient() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState<SubmittedResult | null>(null);
+  const startedRef = useRef(false);
 
   const answered = Object.keys(ratings).length;
   const remaining = 10 - answered;
@@ -164,6 +166,10 @@ export default function AssessmentClient() {
   const handleRate = (statementId: number, value: number) => {
     if (submitted) return;
     if (allAnswered && emailGateShown) return; // lock once gate is open
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track("assessment_started");
+    }
     setRatings((prev) => ({ ...prev, [statementId]: value }));
   };
 
@@ -218,6 +224,14 @@ export default function AssessmentClient() {
     if (!result.ok) {
       // eslint-disable-next-line no-console
       console.warn("Assessment submission failed", result.status, result.error);
+    } else {
+      track("assessment_completed", {
+        value: totalScore,
+        metadata: {
+          tier: tier.label,
+          area_scores: areaScores,
+        },
+      });
     }
 
     setSubmitting(false);
@@ -258,7 +272,7 @@ export default function AssessmentClient() {
       </section>
 
       {/* STATEMENTS */}
-      <section className="section">
+      <section id="assessment-form" className="section">
         <div className="container">
           <form id="assessmentForm" noValidate onSubmit={(e) => e.preventDefault()}>
             {AREAS.map((area) => (

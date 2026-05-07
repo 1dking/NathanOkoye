@@ -10,7 +10,7 @@ export default function WorkWithNathanPage() {
   return (
     <>
 {/* HERO */}
-    <section className="hero">
+    <section id="work-with-nathan" className="hero">
       <div className="container container-narrow">
         <div className="hero-centered">
           <p className="eyebrow hero-eyebrow">Work With Nathan</p>

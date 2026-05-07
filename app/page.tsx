@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <>
 {/* HERO dark dramatic, portrait as background */}
-    <section className="hero-dramatic">
+    <section id="hero" className="hero-dramatic">
 
       {/* Background portrait, faded on all sides */}
       <div className="hero-bg-image" aria-hidden="true">
@@ -57,7 +57,7 @@ export default function HomePage() {
     </section>
 
     {/* PROOF BAR */}
-    <section className="proof-bar">
+    <section id="proof-bar" className="proof-bar">
       <div className="container">
         <dl className="proof-grid">
           <div className="stat">
@@ -122,7 +122,7 @@ export default function HomePage() {
     </section>
 
     {/* SECTION 3 SOCIAL PROOF */}
-    <section className="section">
+    <section id="case-studies" className="section">
       <div className="container">
         <header className="section-header">
           <p className="eyebrow">Selected Work</p>
@@ -184,7 +184,7 @@ export default function HomePage() {
     </section>
 
     {/* SECTION 4 THE FRAMEWORK */}
-    <section className="section section-paper-deep">
+    <section id="core-framework" className="section section-paper-deep">
       <div className="container">
         <header className="section-header">
           <p className="eyebrow">The Framework</p>
@@ -236,7 +236,7 @@ export default function HomePage() {
     </section>
 
     {/* SECTION 5 ABOUT NATHAN */}
-    <section className="section">
+    <section id="about" className="section">
       <div className="container">
         <div className="split split-asym">
           <div className="portrait-frame portrait-frame--full">
@@ -276,7 +276,7 @@ export default function HomePage() {
     </section>
 
     {/* SECTION 7 CLOSING CTA */}
-    <section className="cta-banner">
+    <section id="cta" className="cta-banner">
       <div className="container">
         <p className="eyebrow eyebrow-plain" style={{ display: 'block', textAlign: 'center', marginBottom: '1.25rem' }}>Ready</p>
         <h2 className="text-balance">Ready to close the gap?</h2>

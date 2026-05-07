@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import Tracker from "@/components/Tracker";
 
 export const metadata: Metadata = {
   title: {
@@ -30,6 +31,7 @@ export default function RootLayout({
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        <Tracker />
         <Script src="https://arivio.io/widget.js" data-username="nate" strategy="afterInteractive" />
       </body>
     </html>
