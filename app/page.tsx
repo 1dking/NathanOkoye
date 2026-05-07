@@ -21,9 +21,6 @@ export default function HomePage() {
 
   const heroCtaLabel =
     tier === "high" ? "Book The CORE Discovery Session →" : "Work with Nathan →";
-  // High tier triggers the Arivio booking widget; lower tiers still
-  // navigate to /work-with-nathan to read the engagement page first.
-  const heroCtaIsWidget = tier === "high";
 
   const closingHeadline =
     tier === "high"
@@ -87,11 +84,7 @@ export default function HomePage() {
               {heroTagline}
             </p>
             <div className="cta-row">
-              {heroCtaIsWidget ? (
-                <a href="#" data-arivio-widget="open" className="btn btn-on-ink btn-lg">{heroCtaLabel}</a>
-              ) : (
-                <Link href="/work-with-nathan" className="btn btn-on-ink btn-lg">{heroCtaLabel}</Link>
-              )}
+              <a href="#" data-arivio-widget="open" className="btn btn-on-ink btn-lg">{heroCtaLabel}</a>
             </div>
             <div className="hero-dramatic-meta">
               <div className="hero-dramatic-meta-item"><strong>$75M+</strong><span>engagement acquired</span></div>

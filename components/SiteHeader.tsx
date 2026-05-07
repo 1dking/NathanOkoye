@@ -152,9 +152,9 @@ export default function SiteHeader() {
             </li>
           </ul>
           <div className="nav-actions">
-            <Link href="/work-with-nathan" className="btn btn-primary btn-sm hide-sm">
+            <a href="#" data-arivio-widget="open" className="btn btn-primary btn-sm hide-sm">
               Book a Discovery Session
-            </Link>
+            </a>
             <button
               type="button"
               className="nav-toggle show-sm"

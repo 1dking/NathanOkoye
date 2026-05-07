@@ -88,6 +88,7 @@ const TIERS: Tier[] = [
       "Distinctiveness and Authentic Expression. Your content needs to speak your client's language more precisely than it currently does. The gap is in translation, not in substance.",
     ctaText: "The CORE Discovery Session identifies exactly where the translation is breaking down →",
     ctaHref: "/work-with-nathan",
+    ctaArivio: true,
   },
   {
     range: [20, 29],
@@ -99,6 +100,7 @@ const TIERS: Tier[] = [
       "Distinctiveness first, then Organic Reach. Before systems, before ads, before consistency the foundation needs to be set. What makes you genuinely different must be identified and articulated before anything else is built.",
     ctaText: "The CORE Discovery Session was built for this starting point →",
     ctaHref: "/work-with-nathan",
+    ctaArivio: true,
   },
   {
     range: [10, 19],
