@@ -71,8 +71,53 @@ async function handlePersonalisation(request: NextRequest): Promise<NextResponse
 }
 
 /* ---------- Phase 5: Admin auth gate ---------- */
+function configErrorResponse(): NextResponse {
+  // Plain HTML, served from the Edge — no Supabase client needed. Renders
+  // when SUPABASE_URL / ANON_KEY / SERVICE_ROLE_KEY are missing on the
+  // deployment so the visitor sees actionable instructions instead of a
+  // generic 500 from the supabase-js init.
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin not configured</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #080808; color: #F0EBE3; margin: 0; padding: 3rem 1.5rem; min-height: 100vh; }
+    main { max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    h1 { color: #E05A0C; margin: 0 0 1rem; font-size: 1.6rem; }
+    p { color: #B9B0A1; margin: 0 0 1rem; }
+    ul { padding-left: 1.25rem; color: #F0EBE3; }
+    code { background: #1a1a1a; padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.95em; }
+    .footnote { color: #5e5950; font-size: 0.85rem; margin-top: 2rem; }
+  </style>
+</head>
+<body><main>
+  <h1>Admin not configured</h1>
+  <p>This deployment is missing the Supabase environment variables that the admin auth gate needs.</p>
+  <p>Add the following on <strong>Vercel → Project Settings → Environment Variables</strong> (Production), then redeploy:</p>
+  <ul>
+    <li><code>NEXT_PUBLIC_SUPABASE_URL</code></li>
+    <li><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></li>
+    <li><code>SUPABASE_SERVICE_ROLE_KEY</code></li>
+  </ul>
+  <p class="footnote">If you're not the deployment owner, this isn't the page you were looking for. Try again later.</p>
+</main></body>
+</html>`;
+  return new NextResponse(html, {
+    status: 503,
+    headers: { "content-type": "text/html; charset=utf-8" },
+  });
+}
+
 async function handleAdminAuth(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
+
+  // Defensive: bail with an actionable message rather than crashing the
+  // Supabase client constructor when env vars are missing.
+  if (!SUPABASE_URL || !ANON_KEY) {
+    return configErrorResponse();
+  }
 
   // Build a response we'll mutate as Supabase refreshes auth cookies.
   let response = NextResponse.next({ request });
