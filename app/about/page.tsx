@@ -68,15 +68,10 @@ export default function AboutPage() {
     {/* IMAGE BREAK */}
     <section className="image-band">
       <div className="container">
-        <div className="img-placeholder img-placeholder--banner">
-          <div className="img-placeholder__inner">
-            <span className="img-placeholder__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-            </span>
-            <p className="img-placeholder__eyebrow">Image · 21:9 banner</p>
-            <p className="img-placeholder__caption">Editorial photograph workspace, in motion. The craft behind the framework.</p>
-          </div>
-        </div>
+        <figure className="img-frame img-frame--banner">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/about-workspace.svg" alt="Editorial flat-lay of a workspace — an open notebook, pen, reference cards and coffee. The craft behind the framework." />
+        </figure>
       </div>
     </section>
 
@@ -115,24 +110,14 @@ export default function AboutPage() {
         </div>
 
         <div className="image-duo mt-7">
-          <div className="img-placeholder img-placeholder--landscape">
-            <div className="img-placeholder__inner">
-              <span className="img-placeholder__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-              </span>
-              <p className="img-placeholder__eyebrow">Image · 3:2</p>
-              <p className="img-placeholder__caption">Personal a quieter moment. The life behind the work.</p>
-            </div>
-          </div>
-          <div className="img-placeholder img-placeholder--landscape">
-            <div className="img-placeholder__inner">
-              <span className="img-placeholder__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="11" r="1.5"/><path d="M3 17l5-4 4 3 4-2 5 3"/></svg>
-              </span>
-              <p className="img-placeholder__eyebrow">Image · 3:2</p>
-              <p className="img-placeholder__caption">Toronto a sense of place. Where the work happens.</p>
-            </div>
-          </div>
+          <figure className="img-frame img-frame--landscape">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/about-personal.svg" alt="A father's quiet early hour — dawn light through a window, a child's crayon drawing of the family taped to the glass, two mugs, well-read books with reading glasses and a framed family portrait. The life, and the reason, behind the work." />
+          </figure>
+          <figure className="img-frame img-frame--landscape">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/about-toronto.svg" alt="The Toronto skyline at dusk with the CN Tower. A sense of place — where the work happens." />
+          </figure>
         </div>
       </div>
     </section>
