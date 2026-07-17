@@ -461,6 +461,11 @@ p { margin: 0 0 var(--s-3); }
 }
 @media (min-width: 880px) {
   .nav-brand-logo { height: 40px; }
+  /* The new mark is a compact portrait monogram (~32px wide) versus the old
+     wordmark's ~200px, which pulled the nav tabs 168px to the left along
+     with it. Reserve the old wordmark's footprint so the tabs land back
+     where they were, with the mark anchored at its natural left edge. */
+  .nav-brand--logo { min-width: 200px; }
 }
 
 .nav-links {

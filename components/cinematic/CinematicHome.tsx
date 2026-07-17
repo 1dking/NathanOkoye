@@ -508,7 +508,7 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
           </div>
           <div className="cin-finale-socials">
             <a href="mailto:nathan@ocidm.com">nathan@ocidm.com</a>
-            <a href="https://ocidm.com" rel="noopener">OCIDM</a>
+            <a href="https://ocidm.io" rel="noopener">OCIDM.IO</a>
             <Link href="/about">About</Link>
             <Link href="/core-framework">CORE Framework</Link>
             <Link href="/work-with-nathan">Work With Nathan</Link>

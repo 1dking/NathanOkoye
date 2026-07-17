@@ -89,10 +89,10 @@ export default function SiteHeader() {
         <nav className="nav" aria-label="Primary">
           <Link href="/" className="nav-brand nav-brand--logo" aria-label="Nathan Okoye — home">
             <Image
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt="Nathan Okoye"
-              width={200}
-              height={40}
+              width={320}
+              height={400}
               priority
               className="nav-brand-logo"
             />

@@ -70,11 +70,29 @@ body.is-cinema .btn-primary:hover {
 body.is-cinema .link-arrow { color: var(--cin-cream); border-bottom-color: var(--cin-emerald); }
 body.is-cinema .link-arrow:hover { color: var(--cin-emerald-bright); }
 
-/* Footer keeps its dark treatment (it used --ink as background) */
+/* Footer keeps its dark treatment (it used --ink/--paper-soft as if they
+   were still the pre-cinematic near-black/cream pair; both got flipped by
+   the token inversion above, so every footer child needs an explicit
+   cream-on-black override too, not just the container). */
 body.is-cinema .site-footer {
   background: #030404;
   border-top: 1px solid rgba(242, 237, 224, 0.08);
   color: rgba(242, 237, 224, 0.72);
+}
+body.is-cinema .footer-brand,
+body.is-cinema .footer-heading {
+  color: var(--cin-cream);
+}
+body.is-cinema .footer-tagline {
+  color: rgba(242, 237, 224, 0.65);
+}
+body.is-cinema .site-footer a {
+  color: rgba(242, 237, 224, 0.85);
+  text-decoration-color: rgba(242, 237, 224, 0.3);
+}
+body.is-cinema .site-footer a:hover {
+  color: var(--cin-emerald-bright);
+  text-decoration-color: var(--cin-emerald-bright);
 }
 
 /* Case cards pick up the cinematic hover */

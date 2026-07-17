@@ -51,8 +51,8 @@ export default function SiteFooter() {
                 <a href="mailto:nathan@ocidm.com">nathan@ocidm.com</a>
               </li>
               <li>
-                <a href="https://ocidm.com" rel="noopener">
-                  OCIDM
+                <a href="https://ocidm.io" rel="noopener">
+                  OCIDM.IO
                 </a>
               </li>
             </ul>
