@@ -258,12 +258,14 @@ body.is-cinema.has-dark-hero .site-header .btn-primary:hover {
 .cin-hero-eyebrow {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   font-size: 0.8rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--cin-cream-dim);
   margin-bottom: 1.4rem;
+  text-align: center;
 }
 .cin-hero-eyebrow::before {
   content: '';
@@ -627,6 +629,7 @@ body.is-cinema.has-dark-hero .site-header .btn-primary:hover {
   .cin-pillars-inner { text-align: center; }
   .cin-pillar-desc { margin-inline: auto; }
   .cin-work-heading { text-align: center; }
+  .cin-card { text-align: center; }
 
   /* The pillars/work background scrim is a left-to-right gradient tuned
      for a wide desktop reading column; on a narrow phone screen that same

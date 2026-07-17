@@ -1784,6 +1784,61 @@ body.has-dark-hero .site-header.is-scrolled .nav-toggle span { background: var(-
   .hero-dramatic-tagline { margin-inline: auto; }
   .hero-dramatic-meta { align-items: center; text-align: center; }
   .hero-dramatic-meta-item { justify-content: center; }
+
+  /* -----------------------------------------------------------------------
+     Center everything on mobile: headers, kickers, body copy, quotes,
+     cards, stats, and the footer. Scoped to the public marketing pages'
+     classes only — admin dashboard (.admin-*) is untouched.
+     ----------------------------------------------------------------------- */
+
+  /* Eyebrow/kicker badges (icon + text) shrink-wrap or blockify to full
+     width depending on context, but always default to flex-start — flip
+     to a centered row so the dash/dot and label sit in the middle. */
+  .eyebrow, .eyebrow-pill {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Headings, lead paragraphs, body copy, quotes, callouts, cards */
+  .hero-h1, .hero-sub, .h1,
+  .lead, .subhead, .section-header, .prose,
+  .split-asym > div,
+  .core-letter, .core-letter p,
+  .pullquote, .client-quote, .callout,
+  .case-meta-row, .case-card,
+  .stat, .medium-banner p {
+    text-align: center;
+  }
+  .hero-sub, .lead, .subhead, .prose,
+  .core-letter p, .pullquote, .stat-label, .medium-banner p {
+    margin-inline: auto;
+  }
+  .stat { align-items: center; }
+  .case-card .case-foot { justify-content: center; gap: var(--s-3); }
+
+  /* Pullquote/client-quote use a left accent rule that reads oddly beside
+     centered text — move it above instead. */
+  .pullquote {
+    border-left: 0;
+    border-top: 2px solid var(--accent);
+    padding-left: 0;
+    padding-top: var(--s-4);
+  }
+  .client-quote {
+    border-left: 0;
+    border-top: 3px solid var(--accent);
+    border-radius: var(--r-md);
+  }
+
+  /* CTA button rows always centered on mobile */
+  .cta-row { justify-content: center; }
+
+  /* Footer */
+  .footer-grid { text-align: center; }
+  .footer-tagline { margin-inline: auto; }
+  .footer-list { align-items: center; }
+  .footer-bottom { justify-content: center; text-align: center; }
 }
 
 /* -------------------------------------------------------------------------
