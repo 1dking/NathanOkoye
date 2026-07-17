@@ -609,10 +609,33 @@ body.is-cinema.has-dark-hero .site-header .btn-primary:hover {
   .cin-stats-grid { grid-template-columns: repeat(2, 1fr); }
   .cin-work-grid { grid-template-columns: 1fr; }
 }
-@media (max-width: 560px) {
-  .cin-stats-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .cin-hero { height: 380vh; }
-  .cin-pillars { height: 340vh; }
+@media (max-width: 640px) {
+  /* Shorten the two scroll-scrubbed sections substantially — 380vh/340vh
+     (~7.2 screen-heights combined) made the phone experience feel like an
+     endless scroll before any real content appeared. These still leave
+     comfortable room for the frame scrub / word sequence / pillar dwell
+     times, just without the excess. */
+  .cin-hero { height: 220vh; }
+  .cin-pillars { height: 200vh; }
+
+  /* Large display type that reads fine left-aligned in a wide desktop
+     column looks lopsided floating on a narrow phone screen with mostly
+     empty space beside it — center it instead. */
+  .cin-stats-grid { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+  .cin-stat-rule { margin-inline: auto; }
+  .cin-stat-label { margin-inline: auto; }
+  .cin-pillars-inner { text-align: center; }
+  .cin-pillar-desc { margin-inline: auto; }
+  .cin-work-heading { text-align: center; }
+
+  /* The pillars/work background scrim is a left-to-right gradient tuned
+     for a wide desktop reading column; on a narrow phone screen that same
+     gradient reads as a hard bright/dark split down the middle instead of
+     a subtle vignette. Flatten it to an even, symmetric darkening. */
+  .cin-video-shade {
+    background:
+      linear-gradient(180deg, rgba(5, 6, 5, 0.75), rgba(5, 6, 5, 0.5) 30%, rgba(5, 6, 5, 0.5) 70%, rgba(5, 6, 5, 0.85));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
