@@ -22,11 +22,20 @@ export default function SiteHeader() {
   const [caseDropdownOpen, setCaseDropdownOpen] = useState(false);
   const caseRef = useRef<HTMLLIElement | null>(null);
 
-  // Sticky header scroll-state, with a higher threshold on the dramatic
-  // dark hero so the header stays transparent over the hero region.
+  // Sticky header scroll-state. On the cinematic home the header stays
+  // hidden for the entire hero intro and appears at the second section
+  // (when the hero pin ends).
   useEffect(() => {
     function onScroll() {
-      const threshold = isHome ? Math.max(window.innerHeight * 0.6, 320) : 8;
+      let threshold: number;
+      if (isHome) {
+        const hero = document.querySelector<HTMLElement>(".cin-hero");
+        threshold = hero
+          ? hero.offsetHeight - window.innerHeight
+          : Math.max(window.innerHeight * 0.6, 320);
+      } else {
+        threshold = 8;
+      }
       setIsScrolled(window.scrollY > threshold);
     }
     onScroll();

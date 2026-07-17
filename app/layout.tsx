@@ -1,9 +1,26 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Anton, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import "./cinematic.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Tracker from "@/components/Tracker";
+import CinematicFX from "@/components/cinematic/CinematicFX";
+
+const anton = Anton({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-anton",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  variable: "--font-grotesk",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${anton.variable} ${spaceGrotesk.variable}`}>
       <body>
         <a className="skip-link" href="#main">
           Skip to content
@@ -31,6 +48,7 @@ export default function RootLayout({
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        <CinematicFX />
         <Tracker />
         <Script src="https://arivio.io/widget.js" data-username="nate" strategy="afterInteractive" />
       </body>

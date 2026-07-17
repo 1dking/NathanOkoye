@@ -1,0 +1,602 @@
+/* =========================================================================
+   CINEMATIC HOME — ink-black scroll experience
+   Scoped under .cinema so the rest of the site keeps the editorial system.
+   ========================================================================= */
+
+:root {
+  --cin-ink: #050605;
+  --cin-ink-2: #0A0C0B;
+  --cin-cream: #F2EDE0;
+  --cin-cream-dim: rgba(242, 237, 224, 0.55);
+  --cin-emerald: #10B981;
+  --cin-emerald-bright: #34D399;
+  --cin-emerald-dim: rgba(16, 185, 129, 0.35);
+  --cin-display: var(--font-anton), 'Arial Narrow', sans-serif;
+  --cin-sans: var(--font-grotesk), 'Inter', sans-serif;
+}
+
+body.is-cinema { background: var(--cin-ink); }
+
+/* -------------------------------------------------------------------------
+   SITE-WIDE CINEMATIC THEME — token inversion
+   Applied to every public page via body.is-cinema. The editorial layout
+   and copy stay untouched; the palette flips to ink/emerald/cream and
+   display type switches to the condensed cinematic face.
+   ------------------------------------------------------------------------- */
+body.is-cinema {
+  --paper:        #050605;
+  --paper-deep:   #0B0E0C;
+  --paper-soft:   #0E1311;
+  --ink:          #F2EDE0;
+  --ink-soft:     #DDD6C7;
+  --muted:        #9C968A;
+  --muted-soft:   #7C766C;
+  --rule:         rgba(242, 237, 224, 0.14);
+  --rule-soft:    rgba(242, 237, 224, 0.08);
+  --accent:       #10B981;
+  --accent-deep:  #34D399;
+  --accent-tint:  rgba(16, 185, 129, 0.12);
+  --font-display: var(--font-anton), 'Arial Narrow', sans-serif;
+  --shadow-md: 0 24px 60px -30px rgba(0, 0, 0, 0.9);
+}
+
+/* Cinematic display type for page + section headings */
+body.is-cinema h1,
+body.is-cinema h2,
+body.is-cinema .hero-h1,
+body.is-cinema .h1 {
+  font-family: var(--cin-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  line-height: 0.98;
+}
+body.is-cinema h3 { font-family: var(--cin-sans); font-weight: 600; }
+body.is-cinema ::selection { background: var(--cin-emerald); color: #04130D; }
+
+/* Emerald primary actions (dark label for contrast on emerald) */
+body.is-cinema .btn-primary {
+  background: var(--cin-emerald);
+  border-color: var(--cin-emerald);
+  color: #04130D;
+}
+body.is-cinema .btn-primary:hover {
+  background: var(--cin-emerald-bright);
+  border-color: var(--cin-emerald-bright);
+  color: #04130D;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.7);
+}
+body.is-cinema .link-arrow { color: var(--cin-cream); border-bottom-color: var(--cin-emerald); }
+body.is-cinema .link-arrow:hover { color: var(--cin-emerald-bright); }
+
+/* Footer keeps its dark treatment (it used --ink as background) */
+body.is-cinema .site-footer {
+  background: #030404;
+  border-top: 1px solid rgba(242, 237, 224, 0.08);
+  color: rgba(242, 237, 224, 0.72);
+}
+
+/* Case cards pick up the cinematic hover */
+body.is-cinema .case-card:hover {
+  transform: translateY(-8px) rotate(-0.4deg);
+  border-color: var(--cin-emerald);
+  box-shadow: 0 30px 60px -30px rgba(16, 185, 129, 0.45);
+}
+
+/* Framed imagery glows subtly instead of paper shadows */
+body.is-cinema .img-frame {
+  border: 1px solid rgba(242, 237, 224, 0.1);
+}
+
+/* -------------------------------------------------------------------------
+   Scroll reveals — gated on body.cin-fx (added by JS) so no-JS still shows
+   everything. CinematicFX tags targets with .cin-reveal and flips
+   .cin-inview via IntersectionObserver.
+   ------------------------------------------------------------------------- */
+body.cin-fx .cin-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.85s var(--ease-out), transform 0.85s var(--ease-out);
+}
+body.cin-fx .cin-reveal.cin-inview { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  body.cin-fx .cin-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Home: the header is a fixed overlay (hero starts at the very top edge)
+   and stays completely invisible through the hero intro. It fades in as
+   dark glass only once the visitor reaches the second section. */
+body.is-cinema-home .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+body.is-cinema-home .site-header.is-scrolled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Keep the header dark-glass on the cinematic home even after scroll. */
+body.is-cinema.has-dark-hero .site-header.is-scrolled {
+  background: rgba(5, 6, 5, 0.72) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom-color: rgba(242, 237, 224, 0.08) !important;
+  box-shadow: none;
+}
+body.is-cinema.has-dark-hero .site-header.is-scrolled .nav-brand,
+body.is-cinema.has-dark-hero .site-header.is-scrolled .nav-link,
+body.is-cinema.has-dark-hero .site-header.is-scrolled .nav-dropdown-trigger { color: var(--cin-cream); }
+body.is-cinema.has-dark-hero .site-header.is-scrolled .nav-toggle span { background: var(--cin-cream); }
+body.is-cinema.has-dark-hero .site-header.is-scrolled .btn-primary {
+  background: var(--cin-emerald);
+  border-color: var(--cin-emerald);
+  color: #04130D;
+}
+/* Header CTA over the un-scrolled dark hero: emerald, always readable */
+body.is-cinema.has-dark-hero .site-header .btn-primary {
+  background: var(--cin-emerald);
+  border-color: var(--cin-emerald);
+  color: #04130D;
+}
+body.is-cinema.has-dark-hero .site-header .btn-primary:hover {
+  background: var(--cin-emerald-bright);
+  border-color: var(--cin-emerald-bright);
+  color: #04130D;
+}
+
+.cinema {
+  background: var(--cin-ink);
+  color: var(--cin-cream);
+  font-family: var(--cin-sans);
+  overflow-x: clip;
+}
+
+.cinema ::selection { background: var(--cin-emerald); color: #04130D; }
+
+/* ---- film grain ---- */
+.cin-grain {
+  position: fixed;
+  inset: -100px;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: cin-grain-shift 0.9s steps(4) infinite;
+}
+@keyframes cin-grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-40px, 30px); }
+  50% { transform: translate(30px, -45px); }
+  75% { transform: translate(-25px, -20px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* =========================================================================
+   HERO — pinned canvas orbit scrub
+   ========================================================================= */
+.cin-hero { position: relative; height: 460vh; }
+
+.cin-hero-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.cin-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Kinetic intro words — dolly toward the camera with him */
+.cin-hero-word {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cin-display);
+  font-size: clamp(3.5rem, 13vw, 12rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cin-cream);
+  text-shadow: 0 0 60px rgba(16, 185, 129, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+  z-index: 2;
+}
+
+.cin-hero-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 45%, transparent 40%, rgba(5, 6, 5, 0.55) 78%, rgba(5, 6, 5, 0.92) 100%),
+    linear-gradient(to bottom, rgba(5, 6, 5, 0.55), transparent 22%, transparent 72%, rgba(5, 6, 5, 0.85));
+}
+
+.cin-hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 var(--gutter) clamp(2.5rem, 6vh, 5rem);
+  pointer-events: none;
+}
+
+.cin-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cin-cream-dim);
+  margin-bottom: 1.4rem;
+}
+.cin-hero-eyebrow::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cin-emerald-bright);
+  box-shadow: 0 0 14px var(--cin-emerald-bright);
+  animation: cin-pulse 2.4s ease-in-out infinite;
+}
+@keyframes cin-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.cin-hero-name {
+  font-family: var(--cin-display);
+  font-size: clamp(4rem, 15.5vw, 15rem);
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--cin-cream);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: clamp(1rem, 3.5vw, 3.5rem);
+}
+.cin-hero-name .word { display: inline-flex; }
+.cin-hero-name .letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+.cin-hero-name em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--cin-emerald-bright);
+}
+
+.cin-hero-sub {
+  margin-top: 1.6rem;
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  letter-spacing: 0.04em;
+  color: var(--cin-cream-dim);
+  text-align: center;
+  max-width: 44rem;
+}
+.cin-hero-sub strong { color: var(--cin-emerald-bright); font-weight: 500; }
+
+/* SCROLL DOWN — kinetic invitation, smaller sibling of the narrative words */
+.cin-hero-scrollword {
+  font-size: clamp(2rem, 7vw, 6.5rem);
+  letter-spacing: 0.08em;
+  color: rgba(242, 237, 224, 0.9);
+}
+
+.cin-hero-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cin-ink);
+  z-index: 5;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.cin-hero-loader.is-done { opacity: 0; visibility: hidden; }
+.cin-hero-loader span {
+  font-family: var(--cin-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: 0.06em;
+  color: var(--cin-emerald-bright);
+}
+
+/* =========================================================================
+   STATS STRIP
+   ========================================================================= */
+.cin-stats {
+  position: relative;
+  padding: clamp(5rem, 12vh, 9rem) var(--gutter);
+  border-top: 1px solid rgba(242, 237, 224, 0.08);
+  border-bottom: 1px solid rgba(242, 237, 224, 0.08);
+  background:
+    radial-gradient(ellipse 60% 120% at 50% 0%, rgba(16, 185, 129, 0.07), transparent 70%),
+    var(--cin-ink-2);
+}
+.cin-stats-grid {
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+}
+.cin-stat { text-align: left; }
+.cin-stat-number {
+  font-family: var(--cin-display);
+  font-size: clamp(3rem, 6.5vw, 6rem);
+  line-height: 1;
+  color: var(--cin-cream);
+  display: block;
+}
+.cin-stat-number .unit { color: var(--cin-emerald-bright); }
+.cin-stat-label {
+  display: block;
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--cin-cream-dim);
+  max-width: 16rem;
+}
+.cin-stat-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--cin-emerald);
+  margin-bottom: 1.2rem;
+}
+
+/* =========================================================================
+   PILLARS — pinned over The Builder clip
+   ========================================================================= */
+.cin-pillars { position: relative; height: 400vh; }
+.cin-pillars-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.cin-video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+}
+.cin-video-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(5, 6, 5, 0.9) 0%, rgba(5, 6, 5, 0.55) 45%, rgba(5, 6, 5, 0.25) 100%),
+    linear-gradient(to bottom, rgba(5, 6, 5, 0.7), transparent 25%, transparent 75%, rgba(5, 6, 5, 0.8));
+}
+
+.cin-pillars-inner {
+  position: relative;
+  max-width: var(--container-wide);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.cin-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--cin-emerald-bright);
+  margin-bottom: 2rem;
+  display: block;
+}
+.cin-pillar { position: relative; padding: 1.6rem 0; opacity: 0.18; transition: opacity 0.3s ease; }
+.cin-pillar.is-active { opacity: 1; }
+.cin-pillar-index {
+  font-family: var(--cin-sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  color: var(--cin-emerald-bright);
+}
+.cin-pillar-title {
+  font-family: var(--cin-display);
+  font-size: clamp(2.4rem, 6.5vw, 5.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin: 0.4rem 0 0.7rem;
+  color: var(--cin-cream);
+}
+.cin-pillar.is-active .cin-pillar-title { color: var(--cin-cream); }
+.cin-pillar-desc {
+  max-width: 34rem;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--cin-cream-dim);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+.cin-pillar.is-active .cin-pillar-desc { max-height: 12rem; opacity: 1; }
+
+/* =========================================================================
+   WORK — over The Closer clip
+   ========================================================================= */
+.cin-work { position: relative; padding: clamp(6rem, 14vh, 10rem) var(--gutter); overflow: hidden; }
+.cin-work-inner { position: relative; max-width: var(--container-wide); margin: 0 auto; }
+.cin-work-heading {
+  font-family: var(--cin-display);
+  font-size: clamp(3rem, 9vw, 8.5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin: 0 0 4rem;
+  color: var(--cin-cream);
+}
+.cin-work-heading em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--cin-emerald-bright);
+}
+.cin-work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.cin-card {
+  position: relative;
+  display: block;
+  padding: 2.2rem 1.9rem 2.6rem;
+  border: 1px solid rgba(242, 237, 224, 0.12);
+  background: rgba(10, 12, 11, 0.65);
+  backdrop-filter: blur(6px);
+  text-decoration: none;
+  color: var(--cin-cream);
+  transition: transform 0.45s var(--ease-out), border-color 0.45s ease, box-shadow 0.45s ease;
+  will-change: transform;
+}
+.cin-card:hover {
+  transform: translateY(-10px) rotate(-0.6deg);
+  border-color: var(--cin-emerald);
+  box-shadow: 0 30px 60px -30px rgba(16, 185, 129, 0.45);
+}
+.cin-card-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cin-emerald-bright);
+}
+.cin-card-metric {
+  font-family: var(--cin-display);
+  font-size: clamp(2.6rem, 4.5vw, 4.2rem);
+  line-height: 1;
+  margin: 1.1rem 0 0.9rem;
+  color: var(--cin-cream);
+}
+.cin-card-pitch {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--cin-cream-dim);
+  margin: 0 0 2rem;
+}
+.cin-card-cta {
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cin-cream);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.cin-card-cta::after { content: '→'; color: var(--cin-emerald-bright); transition: transform 0.3s ease; }
+.cin-card:hover .cin-card-cta::after { transform: translateX(6px); }
+
+/* =========================================================================
+   FINALE
+   ========================================================================= */
+.cin-finale {
+  position: relative;
+  padding: clamp(7rem, 18vh, 13rem) var(--gutter) clamp(6rem, 14vh, 10rem);
+  text-align: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 70% 90% at 50% 100%, rgba(16, 185, 129, 0.12), transparent 65%), var(--cin-ink);
+}
+.cin-marquee {
+  position: absolute;
+  top: clamp(1rem, 4vh, 3rem);
+  left: 0;
+  white-space: nowrap;
+  font-family: var(--cin-display);
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(242, 237, 224, 0.14);
+  pointer-events: none;
+  will-change: transform;
+}
+.cin-finale-inner { position: relative; max-width: 52rem; margin: clamp(6rem, 14vh, 10rem) auto 0; }
+.cin-finale-heading {
+  font-family: var(--cin-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin: 0 0 1.6rem;
+  color: var(--cin-cream);
+}
+.cin-finale-heading em { font-style: normal; color: var(--cin-emerald-bright); }
+.cin-finale-copy {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.65;
+  color: var(--cin-cream-dim);
+  max-width: 38rem;
+  margin: 0 auto 2.8rem;
+}
+.cin-btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.cin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.05rem 2.2rem;
+  font-family: var(--cin-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--cin-emerald);
+  transition: transform 0.3s var(--ease-out), background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+.cin-btn-solid { background: var(--cin-emerald); color: #04130D; }
+.cin-btn-solid:hover { background: var(--cin-emerald-bright); transform: translateY(-3px); box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.7); }
+.cin-btn-ghost { background: transparent; color: var(--cin-cream); border-color: rgba(242, 237, 224, 0.3); }
+.cin-btn-ghost:hover { border-color: var(--cin-emerald-bright); color: var(--cin-emerald-bright); transform: translateY(-3px); }
+
+.cin-finale-socials {
+  margin-top: 3.5rem;
+  display: flex;
+  gap: 2.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.cin-finale-socials a {
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--cin-cream-dim);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.cin-finale-socials a:hover { color: var(--cin-emerald-bright); }
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+@media (max-width: 900px) {
+  .cin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .cin-work-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .cin-stats-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .cin-hero { height: 380vh; }
+  .cin-pillars { height: 340vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cin-grain { animation: none; }
+}
