@@ -6,19 +6,6 @@ const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 const ADMIN_EMAIL = "info@nathanokoye.com";
 
-/* ---------- Site-wide password gate ---------- */
-const SITE_PASSWORD = process.env.SITE_PASSWORD ?? "";
-const SITE_ACCESS_TOKEN = process.env.SITE_ACCESS_TOKEN ?? "";
-const SITE_ACCESS_COOKIE = "site_ok";
-const LOCK_PATH = "/site-locked";
-const UNLOCK_API_PATH = "/api/site-unlock";
-
-function isSiteUnlocked(request: NextRequest): boolean {
-  // Gate is inert unless both a password and a token secret are configured.
-  if (!SITE_PASSWORD || !SITE_ACCESS_TOKEN) return true;
-  return request.cookies.get(SITE_ACCESS_COOKIE)?.value === SITE_ACCESS_TOKEN;
-}
-
 const VALID_TIERS = ["low", "medium", "high"] as const;
 type Tier = (typeof VALID_TIERS)[number];
 
@@ -179,18 +166,6 @@ async function handleAdminAuth(request: NextRequest): Promise<NextResponse> {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  // Site-wide password gate — runs before everything else, including admin.
-  // The lock page and its unlock endpoint are exempt to avoid a redirect loop.
-  if (pathname !== LOCK_PATH && !pathname.startsWith(UNLOCK_API_PATH)) {
-    if (!isSiteUnlocked(request)) {
-      const url = request.nextUrl.clone();
-      url.pathname = LOCK_PATH;
-      url.search = pathname !== "/" ? `?redirect=${encodeURIComponent(pathname)}` : "";
-      return NextResponse.redirect(url);
-    }
-  }
-
   if (pathname.startsWith("/admin")) {
     return handleAdminAuth(request);
   }
@@ -201,5 +176,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/", "/work-with-nathan", "/admin/:path*"],
 };

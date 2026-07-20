@@ -1,12 +1,7 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function SiteFooter() {
-  const pathname = usePathname();
   const year = new Date().getFullYear();
-  if (pathname === "/site-locked") return null;
   return (
     <footer className="site-footer">
       <div className="container">
