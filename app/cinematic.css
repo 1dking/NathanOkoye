@@ -414,11 +414,44 @@ body.is-cinema.has-dark-hero .site-header .btn-primary:hover {
   transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 .cin-hero-loader.is-done { opacity: 0; visibility: hidden; }
-.cin-hero-loader span {
-  font-family: var(--cin-display);
-  font-size: clamp(2rem, 5vw, 4rem);
-  letter-spacing: 0.06em;
-  color: var(--cin-emerald-bright);
+
+/* Logo mark, dim at rest, with a diagonal light sweeping across it on a
+   loop — same silhouette as the header logo, lit like a signal while the
+   frame sequence loads behind it. */
+.cin-loader-mark {
+  position: relative;
+  display: block;
+  width: 84px;
+  height: 105px;
+  background: rgba(242, 237, 224, 0.28);
+  -webkit-mask: url('/images/logo.png') center / contain no-repeat;
+  mask: url('/images/logo.png') center / contain no-repeat;
+  overflow: hidden;
+}
+.cin-loader-mark::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -80%;
+  width: 45%;
+  height: 220%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.9) 45%,
+    var(--cin-emerald-bright) 50%,
+    rgba(255, 255, 255, 0.9) 55%,
+    transparent
+  );
+  transform: rotate(18deg);
+  animation: cin-loader-shine 2.2s ease-in-out infinite;
+}
+@keyframes cin-loader-shine {
+  0%, 12% { left: -80%; }
+  65%, 100% { left: 160%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cin-loader-mark::after { animation: none; left: 40%; }
 }
 
 /* =========================================================================

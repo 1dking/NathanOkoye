@@ -401,7 +401,7 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
             </p>
           </div>
           <div className={`cin-hero-loader${loaded ? " is-done" : ""}`} aria-hidden="true">
-            <span>NO&hellip;</span>
+            <span className="cin-loader-mark" />
           </div>
         </div>
       </section>
