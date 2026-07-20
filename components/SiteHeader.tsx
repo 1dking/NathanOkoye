@@ -83,6 +83,8 @@ export default function SiteHeader() {
   const isCurrent = (href: string) => pathname === href;
   const isCaseStudy = CASE_STUDIES.some((c) => c.href === pathname);
 
+  if (pathname === "/site-locked") return null;
+
   return (
     <header className={`site-header${isScrolled ? " is-scrolled" : ""}`} id="siteHeader">
       <div className="container">

@@ -17,6 +17,89 @@
 
 body.is-cinema { background: var(--cin-ink); }
 
+/* =========================================================================
+   SITE LOCK — password gate screen
+   ========================================================================= */
+.lock-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(ellipse 60% 60% at 50% 40%, var(--cin-emerald-dim), transparent 70%), var(--cin-ink);
+}
+.lock-card {
+  width: 100%;
+  max-width: 26rem;
+  text-align: center;
+  padding: clamp(2.5rem, 6vw, 3.5rem) clamp(1.75rem, 5vw, 2.75rem);
+  border: 1px solid rgba(242, 237, 224, 0.12);
+  border-radius: 6px;
+  background: rgba(10, 12, 11, 0.6);
+  backdrop-filter: blur(8px);
+}
+.lock-kicker {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cin-cream-dim);
+  margin-bottom: 1rem;
+}
+.lock-title {
+  font-family: var(--cin-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  line-height: 0.95;
+  color: var(--cin-cream);
+  margin: 0 0 0.9rem;
+}
+.lock-copy {
+  color: var(--cin-cream-dim);
+  font-size: 0.95rem;
+  margin: 0 0 1.75rem;
+}
+.lock-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.lock-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(242, 237, 224, 0.05);
+  border: 1px solid rgba(242, 237, 224, 0.18);
+  border-radius: 4px;
+  color: var(--cin-cream);
+  font-size: 1rem;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+.lock-input:focus {
+  outline: none;
+  border-color: var(--cin-emerald);
+}
+.lock-input::placeholder { color: var(--cin-cream-dim); }
+.lock-submit {
+  padding: 0.85rem 1.5rem;
+  background: var(--cin-emerald);
+  color: #04130D;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.lock-submit:hover { background: var(--cin-emerald-bright); transform: translateY(-1px); }
+.lock-error {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: #E08A7D;
+}
+
 /* -------------------------------------------------------------------------
    SITE-WIDE CINEMATIC THEME — token inversion
    Applied to every public page via body.is-cinema. The editorial layout
