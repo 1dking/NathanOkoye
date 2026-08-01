@@ -72,7 +72,7 @@ I am a brand strategist based in Canada. I run OCIDM, the agency through which m
 
 My work sits at the intersection of brand strategy, digital marketing, content systems, and community building. I do not separate these things because they are not separate. A brand without a content system is a logo and a tagline. A content system without brand strategy is noise. A community without both is just an audience that doesn't know why it showed up.
 
-I have helped a senior advisor acquire a $75 million engagement through positioning alone. I have built a cultural initiative from nothing to 15,000 attendees. I have repositioned an expert's first product from celebrated to purchased, generating $39,378 in online revenue. I have helped an established performing arts organisation sell out for the first time in 15 years.
+I have helped a senior advisor acquire a $135 million engagement through positioning alone. I have built a cultural initiative from nothing to 15,000 attendees. I have repositioned an expert's first product from celebrated to purchased, generating $39,378 in online revenue. I have helped an established performing arts organisation sell out for the first time in 15 years.
 
 None of those results came from tactics. They came from starting in the right place, with the right question, every time.
 

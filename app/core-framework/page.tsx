@@ -187,8 +187,8 @@ export default function CoreFrameworkPage() {
         <div className="case-grid">
           <Link href="/case-study-advisor" className="case-card">
             <p className="eyebrow eyebrow-muted">Senior advisor, 20-year practice</p>
-            <p className="case-outcome text-balance">$75M+ advisory engagement in six months.</p>
-            <p className="case-desc">A senior advisor with a 20-year practice acquired a $75 million advisory engagement within six months of rebuilding her positioning and digital presence. No campaign. No outreach. Precise positioning.</p>
+            <p className="case-outcome text-balance">$135M+ advisory engagement in six months.</p>
+            <p className="case-desc">A senior advisor with a 20-year practice acquired a $135 million advisory engagement within six months of rebuilding her positioning and digital presence. No campaign. No outreach. Precise positioning.</p>
             <div className="case-foot">
               <span className="case-meta">Read the case study</span>
               <span className="case-arrow" aria-hidden="true">→</span>

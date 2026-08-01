@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "$75M Philanthropic Engagement, Through Positioning Alone",
-  description: "A senior philanthropic advisor with decades of credibility had a brand that communicated none of it. Within six months, she acquired an engagement worth over $75 million.",
+  title: "$135M Philanthropic Engagement, Through Positioning Alone",
+  description: "A senior philanthropic advisor with decades of credibility had a brand that communicated none of it. Within six months, she acquired an engagement worth over $135 million.",
 };
 
 export default function CaseStudyAdvisorPage() {
@@ -15,7 +15,7 @@ export default function CaseStudyAdvisorPage() {
       <div className="container">
         <p className="eyebrow">Case Study · Senior Advisor</p>
         <h1 className="h1 text-balance" style={{ maxWidth: '22ch' }}>
-          How precise positioning generated a $75M philanthropic engagement, without a single marketing campaign.
+          How precise positioning generated a $135M philanthropic engagement, without a single marketing campaign.
         </h1>
 
         <dl className="case-meta-row mt-7">
@@ -33,7 +33,7 @@ export default function CaseStudyAdvisorPage() {
           </div>
           <div>
             <dt>Result</dt>
-            <dd>$75M+ engagement in six months</dd>
+            <dd>$135M+ engagement in six months</dd>
           </div>
         </dl>
 
@@ -53,7 +53,7 @@ export default function CaseStudyAdvisorPage() {
       <div className="container">
         <div className="prose">
           <p className="lead" style={{ maxWidth: '44ch' }}>
-            A senior philanthropic advisor had decades of experience advising ultra-high-net-worth individuals and institutions on consequential philanthropic decisions. A prior digital agency had failed to represent that expertise. Her public-facing brand communicated none of it. Within six months of rebuilding her positioning and digital presence, she acquired a philanthropic advisory engagement worth over $75 million. Not from a campaign. Not from outreach. From being seen clearly for the first time.
+            A senior philanthropic advisor had decades of experience advising ultra-high-net-worth individuals and institutions on consequential philanthropic decisions. A prior digital agency had failed to represent that expertise. Her public-facing brand communicated none of it. Within six months of rebuilding her positioning and digital presence, she acquired a philanthropic advisory engagement worth over $135 million. Not from a campaign. Not from outreach. From being seen clearly for the first time.
           </p>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function CaseStudyAdvisorPage() {
           <h2 className="text-balance">What was the actual problem?</h2>
         </header>
         <div className="prose stack">
-          <p>A $75M engagement doesn't come from better marketing. It comes from being the obvious choice when someone with that level of decision-making authority goes looking for a trusted advisor and finding a presence that matches the seriousness of the work.</p>
+          <p>A $135M engagement doesn't come from better marketing. It comes from being the obvious choice when someone with that level of decision-making authority goes looking for a trusted advisor and finding a presence that matches the seriousness of the work.</p>
           <p>The advisor's problem was not her credentials. It was translation. She had spent decades building expertise in high-impact philanthropy, working at the intersection of institutional capital and meaningful community outcomes. The experience was real. The track record was real. The network trusted her. But her public-facing presence communicated none of it and in the world of ultra-high-net-worth advisory relationships, what a brand communicates is often the first and only filter that matters before a conversation begins.</p>
           <p>A previous agency had attempted to address this. They produced deliverables that failed to represent the caliber of the work, and in doing so, broke the trust required to try again. She arrived carrying that prior experience not just a positioning problem, but a confidence problem in the process itself.</p>
           <p>The question the engagement had to answer was not "how do we make her look more impressive?" It was: how do we take what is genuinely true about this person's expertise and build the systems that make it visible to the people who are already making decisions at the level she advises on?</p>
@@ -101,8 +101,8 @@ export default function CaseStudyAdvisorPage() {
           <h2 className="text-balance">What did the outcome actually prove?</h2>
         </header>
         <div className="prose stack">
-          <p>Within six months of launch, the advisor acquired a philanthropic advisory engagement valued at over $75 million.</p>
-          <p>That outcome is worth examining carefully, because it is often misread. It is not evidence that a good website generates revenue. It is evidence that when positioning is precise, opportunities that already exist in a person's network become accessible in a way they were not before. The $75M engagement did not come from a campaign that found a new prospect. It came from a relationship that already existed one where the other party needed to see a presence that matched what they already knew about her before they could move forward.</p>
+          <p>Within six months of launch, the advisor acquired a philanthropic advisory engagement valued at over $135 million.</p>
+          <p>That outcome is worth examining carefully, because it is often misread. It is not evidence that a good website generates revenue. It is evidence that when positioning is precise, opportunities that already exist in a person's network become accessible in a way they were not before. The $135M engagement did not come from a campaign that found a new prospect. It came from a relationship that already existed one where the other party needed to see a presence that matched what they already knew about her before they could move forward.</p>
           <p>The prior agency had produced a brand that made that conversation harder. The rebuilt positioning made it possible.</p>
         </div>
 
@@ -147,7 +147,7 @@ export default function CaseStudyAdvisorPage() {
         </header>
         <div className="prose stack">
           <p>The pattern in this advisor's situation is the same pattern I see in most consulting and advisory practices that underperform their actual capability. The work is real. The expertise is real. The results for existing clients are real. But the public-facing brand speaks the advisor's language, not the client's language and so the gap between reputation and positioning remains invisible to the people it costs the most.</p>
-          <p>For her, that gap cost access to $75M+ engagements until the positioning was corrected. The number is large because the stakes of the advisory work are large. But the mechanism is identical for a consultant charging $15,000 for a strategic engagement, a coach whose clients are transforming their businesses, or a practitioner whose 20-year track record remains invisible to anyone who hasn't been personally referred.</p>
+          <p>For her, that gap cost access to $135M+ engagements until the positioning was corrected. The number is large because the stakes of the advisory work are large. But the mechanism is identical for a consultant charging $15,000 for a strategic engagement, a coach whose clients are transforming their businesses, or a practitioner whose 20-year track record remains invisible to anyone who hasn't been personally referred.</p>
           <p>The price objection, the referral that doesn't convert, the prospect who seemed interested and then went quiet these are almost always downstream symptoms of a positioning gap, not a capability gap. This case is useful not because of the dollar figure but because of what it clarifies: positioning is not how you describe yourself. It is how the right person understands you at the moment they are deciding who to trust.</p>
         </div>
       </div>

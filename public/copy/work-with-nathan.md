@@ -59,7 +59,7 @@ The CORE Brand Build is priced between $12,000 and $24,000. Timeline is defined 
 
 To be clear about what this is not. It is not an agency retainer where a team executes a brief you hand them. It is a strategic engagement where the positioning work comes first, the systems are built from that positioning, and everything produced reflects a brand that has been built from the inside out rather than assembled from templates.
 
-The results that positioning work has produced: a $75 million advisory engagement acquired through brand clarity alone, 15,000 people at an event built from no brand foundation, $39,378 in revenue unlocked by repositioning an expert's first product, and a first sold-out event in 15 years for an established organisation.
+The results that positioning work has produced: a $135 million advisory engagement acquired through brand clarity alone, 15,000 people at an event built from no brand foundation, $39,378 in revenue unlocked by repositioning an expert's first product, and a first sold-out event in 15 years for an established organisation.
 
 Those results did not come from better execution of a weak strategy. They came from getting the foundation right before anything else was built.
 

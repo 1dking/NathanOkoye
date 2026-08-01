@@ -179,7 +179,7 @@ export default function CaseStudyInstitutionPage() {
         <div className="case-grid">
           <Link href="/case-study-advisor" className="case-card">
             <p className="eyebrow eyebrow-muted">Senior advisor, 20-year practice</p>
-            <p className="case-outcome text-balance">$75M+ engagement from positioning alone.</p>
+            <p className="case-outcome text-balance">$135M+ engagement from positioning alone.</p>
             <p className="case-desc">A philanthropic advisor with decades of credibility. The prior agency had failed her. Six months after rebuilding the positioning, the right person finally saw what was always there.</p>
             <div className="case-foot">
               <span className="case-meta">Read the case study</span>

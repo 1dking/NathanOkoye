@@ -46,8 +46,8 @@ const WORK = [
   {
     href: "/case-study-advisor",
     tag: "Senior Advisor",
-    metric: "$75M+",
-    pitch: "Decades of credibility, invisible brand. Six months of repositioning — a $75M+ engagement found her.",
+    metric: "$135M+",
+    pitch: "Decades of credibility, invisible brand. Six months of repositioning — a $135M+ engagement found her.",
   },
   {
     href: "/case-study-institution",

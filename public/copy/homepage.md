@@ -19,7 +19,7 @@ Work with Nathan →
 ## PROOF BAR
 *(Four numbers, no names, directly below the hero)*
 
-$75M+ Engagement acquired by a senior advisor through positioning alone
+$135M+ Engagement acquired by a senior advisor through positioning alone
 15,000 People who showed up for a brand built from nothing
 $39K Revenue unlocked by repositioning an expert's first product
 15 yrs First sold-out event for an established organisation
@@ -61,7 +61,7 @@ The consultants I work with are not lacking expertise. They are lacking a brand 
 **H2: What changes when the brand finally matches the work.**
 
 **Senior advisor, 20-year practice:**
-A philanthropic advisor with decades of credibility had a brand that communicated none of it. A prior agency had failed her. Within six months of rebuilding her positioning and digital presence, she acquired an advisory engagement worth over $75 million. No campaign. No outreach. Precise positioning, and the right person finally saw what was always there.
+A philanthropic advisor with decades of credibility had a brand that communicated none of it. A prior agency had failed her. Within six months of rebuilding her positioning and digital presence, she acquired an advisory engagement worth over $135 million. No campaign. No outreach. Precise positioning, and the right person finally saw what was always there.
 
 → Read the full case study
 

@@ -401,7 +401,7 @@ EMAILS.append(("generic-content", "generic-content", 1,
     "The gap between your expertise and your brand",
     "\n".join([
         GREETING,
-        p("A senior philanthropic advisor came to me with a brand that communicated none of her expertise. The track record was real. The credibility in her network was real. The public-facing presence was not. Within six months of rebuilding the positioning, she acquired a philanthropic advisory engagement worth over $75 million — not from a campaign, not from outreach, from being seen clearly for the first time."),
+        p("A senior philanthropic advisor came to me with a brand that communicated none of her expertise. The track record was real. The credibility in her network was real. The public-facing presence was not. Within six months of rebuilding the positioning, she acquired a philanthropic advisory engagement worth over $135 million — not from a campaign, not from outreach, from being seen clearly for the first time."),
         p_soft(f'The full story is here: <a href="{SITE}/case-study-advisor" style="color:#E05A0C;">Read the case study</a>.'),
         cta("Book The CORE Discovery Session →", f"{SITE}/work-with-nathan"),
         SIGNOFF,

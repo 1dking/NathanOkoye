@@ -295,7 +295,7 @@ export default function BglPage({
                   <td>Anton</td>
                   <td>48–96px</td>
                   <td>normal</td>
-                  <td className="ex">$75M+</td>
+                  <td className="ex">$135M+</td>
                 </tr>
                 <tr>
                   <td>Button label</td>

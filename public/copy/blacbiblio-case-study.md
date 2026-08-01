@@ -67,7 +67,7 @@ The product was always worth buying. The question was always whether it was bein
 
 **Suggested internal links:**
 - "The CORE Framework" (anchor) → /core-framework
-- "A senior advisor with a 20-year practice $75M engagement from positioning alone" (anchor) → /case-study-philanthropic-advisor
+- "A senior advisor with a 20-year practice $135M engagement from positioning alone" (anchor) → /case-study-philanthropic-advisor
 - "A founder building a civic institution from scratch 15,000 attendees" (anchor) → /case-study-civic-institution
 - "Work with Nathan" (anchor) → /work-with-me
 

@@ -34,7 +34,7 @@ export default function CaseStudyOriginPage() {
             </div>
             <div>
               <dt>Result</dt>
-              <dd>The CORE Framework — applied across $75M+ in client outcomes</dd>
+              <dd>The CORE Framework — applied across $135M+ in client outcomes</dd>
             </div>
           </dl>
 

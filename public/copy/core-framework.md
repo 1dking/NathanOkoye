@@ -129,7 +129,7 @@ If that description fits, the framework fits. The question is whether you want t
 
 The results across four client engagements where the CORE framework was the strategic foundation:
 
-A senior advisor with a 20-year practice acquired a $75 million advisory engagement within six months of rebuilding her positioning and digital presence. No campaign. No outreach. Precise positioning.
+A senior advisor with a 20-year practice acquired a $135 million advisory engagement within six months of rebuilding her positioning and digital presence. No campaign. No outreach. Precise positioning.
 
 A founder building a civic institution in partnership with a municipal government brought 15,000 people to an event with no prior history and no established audience. The brand was built from nothing. So was the attendance.
 

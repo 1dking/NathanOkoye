@@ -79,7 +79,7 @@ The 15,000 attendees were not a marketing result. They were the outcome of a bra
 
 **Suggested internal links:**
 - "The CORE Framework" (anchor) → /core-framework
-- "A senior advisor with a 20-year practice $75M engagement from positioning alone" (anchor) → /case-study-philanthropic-advisor
+- "A senior advisor with a 20-year practice $135M engagement from positioning alone" (anchor) → /case-study-philanthropic-advisor
 - "A subject-matter expert launching their first commercial product" (anchor) → /case-study-education-publisher
 - "Work with Nathan" (anchor) → /work-with-me
 
