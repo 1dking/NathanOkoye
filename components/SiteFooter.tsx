@@ -8,10 +8,7 @@ export default function SiteFooter() {
         <div className="footer-grid">
           <div>
             <p className="footer-brand">Nathan Okoye</p>
-            <p className="footer-tagline">
-              Brand strategist for established consultants whose work is stronger than their pipeline. Built from 15
-              years of hard-won experience.
-            </p>
+            <p className="footer-tagline">Strategist, Authority Architect</p>
           </div>
           <div>
             <p className="footer-heading">Site</p>
@@ -20,27 +17,13 @@ export default function SiteFooter() {
                 <Link href="/about">About</Link>
               </li>
               <li>
-                <Link href="/core-framework">CORE Framework</Link>
+                <Link href="/writing">Writing</Link>
               </li>
               <li>
-                <Link href="/work-with-nathan">Work With Nathan</Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="footer-heading">Case Studies</p>
-            <ul className="footer-list">
-              <li>
-                <Link href="/case-study-advisor">Senior Advisor</Link>
+                <Link href="/speaking">Speaking</Link>
               </li>
               <li>
-                <Link href="/case-study-institution">Civic Institution</Link>
-              </li>
-              <li>
-                <Link href="/case-study-publisher">Subject-Matter Expert</Link>
-              </li>
-              <li>
-                <Link href="/case-study-arts">Performing Arts</Link>
+                <Link href="/contact">Work with me</Link>
               </li>
             </ul>
           </div>
@@ -52,7 +35,7 @@ export default function SiteFooter() {
               </li>
               <li>
                 <a href="https://ocidm.io" rel="noopener">
-                  OCIDM.IO
+                  ocidm.io
                 </a>
               </li>
             </ul>

@@ -76,7 +76,7 @@ const TIERS: Tier[] = [
     focus:
       "Repeatable Systems and Engagement Strategy. You have the identity and the organic reach. Build the infrastructure that makes it consistent at scale and converts attention into conversations.",
     ctaText: "Learn how the full CORE framework compounds what you have already built →",
-    ctaHref: "/core-framework",
+    ctaHref: "/writing",
   },
   {
     range: [30, 39],
@@ -87,7 +87,7 @@ const TIERS: Tier[] = [
     focus:
       "Distinctiveness and Authentic Expression. Your content needs to speak your client's language more precisely than it currently does. The gap is in translation, not in substance.",
     ctaText: "The CORE Discovery Session identifies exactly where the translation is breaking down →",
-    ctaHref: "/work-with-nathan",
+    ctaHref: "/contact",
     ctaArivio: true,
   },
   {
@@ -99,7 +99,7 @@ const TIERS: Tier[] = [
     focus:
       "Distinctiveness first, then Organic Reach. Before systems, before ads, before consistency the foundation needs to be set. What makes you genuinely different must be identified and articulated before anything else is built.",
     ctaText: "The CORE Discovery Session was built for this starting point →",
-    ctaHref: "/work-with-nathan",
+    ctaHref: "/contact",
     ctaArivio: true,
   },
   {
@@ -111,7 +111,7 @@ const TIERS: Tier[] = [
     focus:
       "Identity before everything. Nothing built on an unclear foundation will compound. The CORE framework starts with one question who are you to the people you serve, and does anything you are currently putting into the world reflect that accurately?",
     ctaText: "Book The CORE Discovery Session →",
-    ctaHref: "/work-with-nathan",
+    ctaHref: "/contact",
     ctaArivio: true,
   },
 ];
@@ -443,9 +443,9 @@ export default function AssessmentClient() {
 
               {/* Part 4: secondary CTA */}
               <div className="result-part result-secondary-cta">
-                <Link href="/case-study-advisor" className="link-arrow">
-                  Read the case studies →
-                </Link>
+                <a href="https://ocidm.io" rel="noopener" className="link-arrow">
+                  See the case narratives at OCIDM →
+                </a>
               </div>
             </div>
           </div>

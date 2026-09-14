@@ -169,12 +169,12 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin")) {
     return handleAdminAuth(request);
   }
-  if (pathname === "/" || pathname === "/work-with-nathan") {
+  if (pathname === "/") {
     return handlePersonalisation(request);
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/work-with-nathan", "/admin/:path*"],
+  matcher: ["/", "/admin/:path*"],
 };

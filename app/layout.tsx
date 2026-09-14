@@ -24,11 +24,11 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: "Nathan Okoye | Brand Strategist for Consultants",
+    default: "Nathan Okoye | Strategist",
     template: "%s | Nathan Okoye",
   },
   description:
-    "Nathan Okoye helps established consultants close the gap between the reputation they've built and the brand that represents them. The CORE framework. Real results. 15 years of experience.",
+    "Nathan Okoye. Strategist. Writing on why most strategy consultants never leave the boardroom, and what happens when they do.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },

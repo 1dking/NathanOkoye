@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { FIELD_NOTES, formatNoteDate } from "@/lib/fieldNotes";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,53 +14,44 @@ const FRAME_COUNT = 160;
 const framePath = (i: number) =>
   `/sequence/hero/frame_${String(i + 1).padStart(4, "0")}.webp`;
 
-type Props = {
-  heroCtaLabel: string;
-};
-
-const STATS = [
-  { prefix: "$", value: 75, suffix: "M+", format: (v: number) => String(Math.round(v)), label: "Advisory engagement acquired through positioning alone" },
-  { prefix: "", value: 15000, suffix: "", format: (v: number) => Math.round(v).toLocaleString("en-US"), label: "People showed up for a brand built from nothing" },
-  { prefix: "$", value: 39378, suffix: "", format: (v: number) => Math.round(v).toLocaleString("en-US"), label: "Revenue unlocked by repositioning one expert product" },
-  { prefix: "", value: 15, suffix: "yrs", format: (v: number) => String(Math.round(v)), label: "Of practice forged into the CORE framework" },
-];
-
+/* What I do — revealed one panel at a time over The Builder clip. */
 const PILLARS = [
   {
     index: "01",
-    title: "The CORE Discovery Session",
-    desc: "The entry point for every client, without exception. A paid, standalone session that identifies exactly where your brand gap is and what it is costing you.",
+    title: "The Diagnostic",
+    desc: "I run Authority Architect at OCIDM, a diagnostic engagement for established organizations whose growth has plateaued despite consistent marketing spend.",
   },
   {
     index: "02",
-    title: "The CORE Brand Build",
-    desc: "A custom-scoped engagement built from what the Discovery Session reveals — positioning framework, live platform, website. Built from the inside out, never from templates.",
+    title: "The Method",
+    desc: "The method interviews leadership, staff, and customers separately, because those three views of an organization almost never match, and the gap between them is where growth dies.",
   },
   {
     index: "03",
-    title: "The Ongoing Partnership",
-    desc: "For clients who want the momentum to continue: monthly strategic support and execution as the brand grows. Maximum three clients at a time.",
+    title: "The Sectors",
+    desc: "Cultural institutions. Philanthropic practices. Civic groups. Established professional services. Fifteen years of practice, across philanthropy, education, arts, and civic sectors.",
   },
 ];
 
-const WORK = [
+/* Recent work — the numbers behind the case narratives at OCIDM. */
+const STATS = [
   {
-    href: "/case-study-advisor",
-    tag: "Senior Advisor",
-    metric: "$135M+",
-    pitch: "Decades of credibility, invisible brand. Six months of repositioning — a $135M+ engagement found her.",
+    prefix: "$",
+    value: 135,
+    suffix: "M+",
+    label: "Raised by a philanthropic advisor's clients after repositioning",
   },
   {
-    href: "/case-study-institution",
-    tag: "Civic Institution",
-    metric: "15,000",
-    pitch: "No audience, no history, no brand equity. We built all three — fifteen thousand people showed up.",
+    prefix: "",
+    value: 6,
+    suffix: " of 6",
+    label: "SING! Toronto Vocal Arts Festival events sold out, first time in fifteen years",
   },
   {
-    href: "/case-study-arts",
-    tag: "Performing Arts",
-    metric: "SOLD OUT",
-    pitch: "The first sold-out event in 15 years, unlocked by two months of repositioned content.",
+    prefix: "",
+    value: 20000,
+    suffix: "",
+    label: "Caribana Ignite attendees, up from 15,000. Followers grew from 2,000 to 13,000.",
   },
 ];
 
@@ -82,11 +74,16 @@ function HeroName() {
   );
 }
 
-export default function CinematicHome({ heroCtaLabel }: Props) {
+export default function CinematicHome() {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [activePillar, setActivePillar] = useState(0);
+
+  const recentNotes = useMemo(
+    () => [...FIELD_NOTES].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3),
+    []
+  );
 
   useEffect(() => {
     document.body.classList.add("is-cinema", "is-cinema-home");
@@ -219,6 +216,7 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
       gsap.set(".cin-hero-name .letter", { yPercent: 130, opacity: 0 });
       gsap.set(".cin-hero-sub", { opacity: 0, y: 30 });
       gsap.set(".cin-hero-eyebrow", { opacity: 0, y: 20 });
+      gsap.set(".cin-hero-ctas", { opacity: 0, y: 24 });
       const revealTl = gsap
         .timeline({ paused: true })
         .to(".cin-hero-eyebrow", {
@@ -242,6 +240,11 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
           ".cin-hero-sub",
           { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
           "-=0.4"
+        )
+        .to(
+          ".cin-hero-ctas",
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.35"
         );
       ScrollTrigger.create({
         trigger: ".cin-hero",
@@ -287,7 +290,45 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
         },
       });
 
-      // --- STATS: count up on entry ---
+      // --- PILLARS: reveal one at a time over the builder clip ---
+      ScrollTrigger.create({
+        trigger: ".cin-pillars",
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+          const idx = Math.min(PILLARS.length - 1, Math.floor(self.progress * PILLARS.length));
+          setActivePillar(idx);
+        },
+      });
+
+      // --- ARGUMENT: lines rise in ---
+      gsap.from(".cin-argue-line", {
+        opacity: 0,
+        y: 50,
+        stagger: 0.16,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".cin-argue", start: "top 70%", once: true },
+      });
+
+      // --- THINKING: cards rise in ---
+      gsap.from(".cin-card", {
+        opacity: 0,
+        y: 70,
+        stagger: 0.14,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".cin-work-grid", start: "top 82%", once: true },
+      });
+      gsap.from(".cin-work-heading", {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".cin-work", start: "top 70%", once: true },
+      });
+
+      // --- RECENT WORK: count up on entry ---
       const statEls = gsap.utils.toArray<HTMLElement>(".cin-stat-number [data-count]");
       statEls.forEach((el) => {
         const target = Number(el.dataset.count);
@@ -313,34 +354,6 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
         duration: 0.9,
         ease: "power3.out",
         scrollTrigger: { trigger: ".cin-stats", start: "top 75%", once: true },
-      });
-
-      // --- PILLARS: reveal one at a time over the builder clip ---
-      ScrollTrigger.create({
-        trigger: ".cin-pillars",
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          const idx = Math.min(PILLARS.length - 1, Math.floor(self.progress * PILLARS.length));
-          setActivePillar(idx);
-        },
-      });
-
-      // --- WORK: cards rise in ---
-      gsap.from(".cin-card", {
-        opacity: 0,
-        y: 70,
-        stagger: 0.14,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".cin-work-grid", start: "top 82%", once: true },
-      });
-      gsap.from(".cin-work-heading", {
-        opacity: 0,
-        y: 60,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".cin-work", start: "top 70%", once: true },
       });
 
       // --- FINALE: kinetic marquee ---
@@ -393,12 +406,22 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
             SCROLL DOWN
           </div>
           <div className="cin-hero-content">
-            <span className="cin-hero-eyebrow">Available for select engagements</span>
+            <span className="cin-hero-eyebrow">Strategist · Authority Architect</span>
             <HeroName />
             <p className="cin-hero-sub">
-              Brand strategist for consultants and advisors —{" "}
-              <strong>I close the gap between the expertise you&apos;ve built and the brand that represents it.</strong>
+              Most organizations that stall aren&apos;t broken.{" "}
+              <strong>They&apos;re aimed wrong.</strong>
+              <br />
+              I write about why, and I run the diagnostic that finds where.
             </p>
+            <div className="cin-btn-row cin-hero-ctas">
+              <Link href="/writing" className="cin-btn cin-btn-solid">
+                Read the writing
+              </Link>
+              <a href="#" data-arivio-widget="open" className="cin-btn cin-btn-ghost">
+                Work with me
+              </a>
+            </div>
           </div>
           <div className={`cin-hero-loader${loaded ? " is-done" : ""}`} aria-hidden="true">
             <span className="cin-loader-mark" />
@@ -406,9 +429,94 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
         </div>
       </section>
 
-      {/* ============ STATS ============ */}
-      <section className="cin-stats" aria-label="Results">
-        <div className="cin-stats-grid">
+      {/* ============ WHAT I DO — over The Builder ============ */}
+      <section className="cin-pillars" aria-label="What I do">
+        <div className="cin-pillars-stage">
+          <video
+            className="cin-video-bg"
+            src="/video/builder.mp4"
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="metadata"
+            aria-hidden="true"
+          />
+          <div className="cin-video-shade" aria-hidden="true" />
+          <div className="cin-pillars-inner">
+            <span className="cin-kicker">What I do</span>
+            {PILLARS.map((p, i) => (
+              <article className={`cin-pillar${activePillar === i ? " is-active" : ""}`} key={p.index}>
+                <span className="cin-pillar-index">{p.index}</span>
+                <h2 className="cin-pillar-title">{p.title}</h2>
+                <p className="cin-pillar-desc">{p.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ WHAT I'M KNOWN FOR ARGUING ============ */}
+      <section className="cin-argue" aria-label="What I'm known for arguing">
+        <div className="cin-argue-inner">
+          <span className="cin-kicker cin-argue-line">What I&apos;m known for arguing</span>
+          <h2 className="cin-argue-heading cin-argue-line">
+            Most strategy work never leaves <em>the boardroom.</em>
+          </h2>
+          <p className="cin-argue-copy cin-argue-line">
+            The people in the room where positioning gets decided are the ones who can&apos;t see
+            the problem, because they&apos;re inside it. That&apos;s the through-line of everything
+            I write.
+          </p>
+          <p className="cin-argue-copy cin-argue-line">
+            If you&apos;ve hired a consultant who spent two days with your leadership team, produced
+            a slide deck everyone agreed with, and left, and nothing has changed since, the workshop
+            wasn&apos;t your problem. The room was.
+          </p>
+        </div>
+      </section>
+
+      {/* ============ RECENT THINKING — over The Closer ============ */}
+      <section className="cin-work" aria-label="Recent thinking">
+        <video
+          className="cin-video-bg"
+          src="/video/closer.mp4"
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="metadata"
+          aria-hidden="true"
+        />
+        <div className="cin-video-shade" aria-hidden="true" />
+        <div className="cin-work-inner">
+          <h2 className="cin-work-heading">
+            Recent <em>Thinking</em>
+          </h2>
+          <div className="cin-work-grid">
+            {recentNotes.map((note) => (
+              <Link href={`/writing/${note.slug}`} className="cin-card" key={note.slug}>
+                <span className="cin-card-tag">{formatNoteDate(note.date)}</span>
+                <p className="cin-card-title">{note.title}</p>
+                <p className="cin-card-pitch">{note.description}</p>
+                <span className="cin-card-cta">Read the field note</span>
+              </Link>
+            ))}
+          </div>
+          <div className="cin-work-more">
+            <Link href="/writing" className="cin-btn cin-btn-ghost">
+              Read all Field Notes
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ RECENT WORK ============ */}
+      <section className="cin-stats" aria-label="Recent work">
+        <div className="cin-stats-head">
+          <span className="cin-kicker">Recent work</span>
+        </div>
+        <div className="cin-stats-grid cin-stats-grid--three">
           {STATS.map((s) => (
             <div className="cin-stat" key={s.label}>
               <div className="cin-stat-rule" aria-hidden="true" />
@@ -426,92 +534,40 @@ export default function CinematicHome({ heroCtaLabel }: Props) {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* ============ PILLARS — over The Builder ============ */}
-      <section className="cin-pillars" aria-label="How we work together">
-        <div className="cin-pillars-stage">
-          <video
-            className="cin-video-bg"
-            src="/video/builder.mp4"
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="metadata"
-            aria-hidden="true"
-          />
-          <div className="cin-video-shade" aria-hidden="true" />
-          <div className="cin-pillars-inner">
-            <span className="cin-kicker">Three ways in — one entry point</span>
-            {PILLARS.map((p, i) => (
-              <article className={`cin-pillar${activePillar === i ? " is-active" : ""}`} key={p.index}>
-                <span className="cin-pillar-index">{p.index}</span>
-                <h2 className="cin-pillar-title">{p.title}</h2>
-                <p className="cin-pillar-desc">{p.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============ WORK — over The Closer ============ */}
-      <section className="cin-work" aria-label="Selected work">
-        <video
-          className="cin-video-bg"
-          src="/video/closer.mp4"
-          muted
-          loop
-          playsInline
-          autoPlay
-          preload="metadata"
-          aria-hidden="true"
-        />
-        <div className="cin-video-shade" aria-hidden="true" />
-        <div className="cin-work-inner">
-          <h2 className="cin-work-heading">
-            Selected <em>Work</em>
-          </h2>
-          <div className="cin-work-grid">
-            {WORK.map((w) => (
-              <Link href={w.href} className="cin-card" key={w.href}>
-                <span className="cin-card-tag">{w.tag}</span>
-                <p className="cin-card-metric">{w.metric}</p>
-                <p className="cin-card-pitch">{w.pitch}</p>
-                <span className="cin-card-cta">Read the case study</span>
-              </Link>
-            ))}
-          </div>
+        <div className="cin-stats-more">
+          <a href="https://ocidm.io" rel="noopener" className="cin-card-cta">
+            See the case narratives at OCIDM
+          </a>
         </div>
       </section>
 
       {/* ============ FINALE ============ */}
       <section className="cin-finale" aria-label="Work with Nathan">
         <div className="cin-marquee" aria-hidden="true">
-          CLOSE THE GAP — CLOSE THE GAP — CLOSE THE GAP — CLOSE THE GAP — CLOSE THE GAP —
+          AIMED WRONG · NOT BROKEN · AIMED WRONG · NOT BROKEN · AIMED WRONG · NOT BROKEN ·
         </div>
         <div className="cin-finale-inner">
           <h2 className="cin-finale-heading">
-            Ready to <em>close the gap?</em>
+            Doing everything right and <em>still not compounding?</em>
           </h2>
           <p className="cin-finale-copy">
-            The first step is a conversation, not a pitch. If you are a consultant or advisor whose
-            brand does not yet reflect the work you do, this is where that changes.
+            The diagnostic and the engagement live at OCIDM. The scoping call is thirty minutes and
+            it costs nothing.
           </p>
           <div className="cin-btn-row">
             <a href="#" data-arivio-widget="open" className="cin-btn cin-btn-solid">
-              {heroCtaLabel}
+              Work with me
             </a>
-            <Link href="/case-study-advisor" className="cin-btn cin-btn-ghost">
-              Read the case studies
+            <Link href="/writing" className="cin-btn cin-btn-ghost">
+              Read the writing
             </Link>
           </div>
           <div className="cin-finale-socials">
             <a href="mailto:nathan@ocidm.com">nathan@ocidm.com</a>
             <a href="https://ocidm.io" rel="noopener">OCIDM.IO</a>
             <Link href="/about">About</Link>
-            <Link href="/core-framework">CORE Framework</Link>
-            <Link href="/work-with-nathan">Work With Nathan</Link>
+            <Link href="/writing">Field Notes</Link>
+            <Link href="/speaking">Speaking</Link>
           </div>
         </div>
       </section>

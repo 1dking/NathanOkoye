@@ -3,14 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-const CASE_STUDIES = [
-  { href: "/case-study-origin", label: "The Origin Story" },
-  { href: "/case-study-advisor", label: "Senior Advisor" },
-  { href: "/case-study-institution", label: "Civic Institution" },
-  { href: "/case-study-publisher", label: "Subject-Matter Expert" },
-  { href: "/case-study-arts", label: "Performing Arts" },
+const NAV_LINKS = [
+  { href: "/about", label: "About" },
+  { href: "/writing", label: "Writing" },
+  { href: "/speaking", label: "Speaking" },
+  { href: "/contact", label: "Work with me" },
 ];
 
 export default function SiteHeader() {
@@ -19,8 +18,6 @@ export default function SiteHeader() {
   const isAssessment = pathname === "/assessment";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [caseDropdownOpen, setCaseDropdownOpen] = useState(false);
-  const caseRef = useRef<HTMLLIElement | null>(null);
 
   // Sticky header scroll-state. On the cinematic home the header stays
   // hidden for the entire hero intro and appears at the second section
@@ -55,33 +52,13 @@ export default function SiteHeader() {
     };
   }, [isHome, isAssessment]);
 
-  // Close the mobile menu and case-studies dropdown on route change.
+  // Close the mobile menu on route change.
   useEffect(() => {
     setIsOpen(false);
-    setCaseDropdownOpen(false);
   }, [pathname]);
 
-  // Close the case-studies dropdown on outside click / Escape.
-  useEffect(() => {
-    if (!caseDropdownOpen) return;
-    function handleClick(e: MouseEvent) {
-      if (caseRef.current && !caseRef.current.contains(e.target as Node)) {
-        setCaseDropdownOpen(false);
-      }
-    }
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setCaseDropdownOpen(false);
-    }
-    document.addEventListener("mousedown", handleClick);
-    document.addEventListener("keydown", handleKey);
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-      document.removeEventListener("keydown", handleKey);
-    };
-  }, [caseDropdownOpen]);
-
-  const isCurrent = (href: string) => pathname === href;
-  const isCaseStudy = CASE_STUDIES.some((c) => c.href === pathname);
+  const isCurrent = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   return (
     <header className={`site-header${isScrolled ? " is-scrolled" : ""}`} id="siteHeader">
@@ -99,70 +76,21 @@ export default function SiteHeader() {
           </Link>
 
           <ul className={`nav-links${isOpen ? " is-open" : ""}`}>
-            <li>
-              <Link className="nav-link" href="/about" aria-current={isCurrent("/about") ? "page" : undefined}>
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="nav-link"
-                href="/core-framework"
-                aria-current={isCurrent("/core-framework") ? "page" : undefined}
-              >
-                CORE Framework
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="nav-link"
-                href="/playbook"
-                aria-current={isCurrent("/playbook") ? "page" : undefined}
-              >
-                Playbook
-              </Link>
-            </li>
-            <li className="nav-dropdown" ref={caseRef}>
-              <button
-                type="button"
-                className="nav-link nav-dropdown-trigger"
-                aria-haspopup="true"
-                aria-expanded={caseDropdownOpen}
-                aria-current={isCaseStudy ? "page" : undefined}
-                onClick={() => setCaseDropdownOpen((o) => !o)}
-              >
-                Case Studies
-                <span className="nav-dropdown-caret" aria-hidden="true">▾</span>
-              </button>
-              <ul className={`nav-dropdown-menu${caseDropdownOpen ? " is-open" : ""}`} role="menu">
-                {CASE_STUDIES.map((c) => (
-                  <li key={c.href} role="none">
-                    <Link
-                      className="nav-dropdown-item"
-                      role="menuitem"
-                      href={c.href}
-                      aria-current={isCurrent(c.href) ? "page" : undefined}
-                      onClick={() => setCaseDropdownOpen(false)}
-                    >
-                      {c.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li>
-              <Link
-                className="nav-link"
-                href="/work-with-nathan"
-                aria-current={isCurrent("/work-with-nathan") ? "page" : undefined}
-              >
-                Work With Nathan
-              </Link>
-            </li>
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  className="nav-link"
+                  href={link.href}
+                  aria-current={isCurrent(link.href) ? "page" : undefined}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
           <div className="nav-actions">
             <a href="#" data-arivio-widget="open" className="btn btn-primary btn-sm hide-sm">
-              Book a Discovery Session
+              Work with me
             </a>
             <button
               type="button"
