@@ -62,12 +62,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* IMAGE BREAK */}
+      {/* IMAGE BREAK — the diagnostic in progress */}
       <section className="image-band">
         <div className="container">
           <figure className="img-frame img-frame--banner">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/about-workspace.svg" alt="Editorial flat-lay of a workspace. An open notebook, pen, reference cards and coffee. The craft behind the work." />
+            <img src="/images/about-notebook.png" alt="A discovery-session workbook open on a wooden desk, notes reading &lsquo;Creative Authenticity&rsquo; and &lsquo;the gap is costing you more than you know&rsquo;. The craft behind the work." />
           </figure>
         </div>
       </section>
@@ -90,11 +90,15 @@ export default function AboutPage() {
           <div className="image-duo mt-7">
             <figure className="img-frame img-frame--landscape">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/about-personal.svg" alt="A father's quiet early hour. Dawn light through a window, a child's crayon drawing of the family taped to the glass, two mugs, well-read books with reading glasses and a framed family portrait. The life, and the reason, behind the work." />
+              <img
+                src="/images/about.png"
+                alt="Nathan Okoye in a navy suit, seated in a teal wingback chair against a teal backdrop. A composed portrait."
+                style={{ objectPosition: "center top" }}
+              />
             </figure>
             <figure className="img-frame img-frame--landscape">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/about-toronto.svg" alt="The Toronto skyline at dusk with the CN Tower. A sense of place. Where the work happens." />
+              <img src="/images/about-conversation.png" alt="Nathan in conversation with a client across a boardroom table, notebooks and reference materials in frame. The work in progress." />
             </figure>
           </div>
         </div>
