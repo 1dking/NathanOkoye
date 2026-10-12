@@ -43,15 +43,15 @@ const STATS = [
   },
   {
     prefix: "",
-    value: 6,
-    suffix: " of 6",
-    label: "SING! Toronto Vocal Arts Festival events sold out, first time in fifteen years",
+    value: 15,
+    suffix: " years",
+    label: "SING! Toronto Vocal Arts Festival had never sold out. After repositioning, it did.",
   },
   {
     prefix: "",
-    value: 20000,
+    value: 15000,
     suffix: "",
-    label: "Caribana Ignite attendees, up from 15,000. Followers grew from 2,000 to 13,000.",
+    label: "Caribana Ignite attendees, organizer-reported, for a civic initiative built from nothing",
   },
 ];
 
